@@ -1,0 +1,8 @@
+name = "workunit-site"
+pages_build_output_dir = "public"
+compatibility_date = "2026-10-01"
+
+# Pilot requests from the website form (KV namespace "workunit-leads")
+[[kv_namespaces]]
+binding = "LEADS"
+id = "7a741e77a73243ed89fc5e357572edd4"

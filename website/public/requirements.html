@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invoice field requirements · WorkUnit Labs</title>
+<meta name="description" content="The invoice fields WorkUnit Labs requires and checks before accepting an invoice.">
+<link rel="canonical" href="https://workunitlabs.com/requirements">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="WorkUnit Labs home"><img src="/assets/logo.png" alt="WorkUnit Labs" width="600" height="110"></a>
+    <nav class="links" id="site-menu" aria-label="Main">
+      <a href="/#how">How it works</a>
+      <a href="/#quality">Quality</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/#contact">Contact</a>
+      <a class="menu-only" href="https://portal.workunitlabs.com/">Client login</a>
+      <a class="menu-only" href="https://portal.workunitlabs.com/#upload">Upload invoices</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-login" href="https://portal.workunitlabs.com/">Client login</a>
+      <a class="btn btn-primary nav-start" href="https://portal.workunitlabs.com/start-pilot">Start Pilot</a>
+      <button class="nav-toggle" type="button" aria-controls="site-menu" aria-expanded="false" aria-label="Open menu"><span></span></button>
+    </div>
+  </div>
+</header>
+<main class="legal">
+<h1>Invoice field requirements</h1>
+<p>Every invoice is read and then checked against the rules below. An invoice is <b>accepted</b> only when every required field is present and every check passes. Anything else goes to a human reviewer, and invoices that fail a check are never billed.</p>
+<h2>Required fields</h2><p>If one is missing or unreadable, the invoice is flagged <code>REQUIRED_MISSING</code> with the field's name and sent to review.</p><ul><li>Vendor name</li><li>Invoice number</li><li>Invoice date (a valid calendar date)</li><li>Due date <em>or</em> payment terms</li><li>Currency</li><li>Subtotal</li><li>Tax (0 is fine if the invoice states it)</li><li>Total</li><li>At least one line item with an amount</li></ul>
+<h2>Optional fields</h2><p>We capture these when they're on the invoice and show you when they're absent, but they never block acceptance.</p><ul><li>Vendor address</li><li>Vendor tax ID</li><li>PO number</li><li>Bill-to</li><li>Payment terms</li><li>Line quantity and unit price</li><li>Item codes</li><li>GL / account coding</li><li>Shipping</li><li>Discounts</li><li>Notes</li></ul>
+<h2>Other checks on every invoice</h2><ul>
+<li><b>Math:</b> line amounts, subtotal, tax and total must add up to the cent.</li>
+<li><b>Currency:</b> every amount must be in the invoice's currency, and the currency must match the vendor's usual currency (USD by default).</li>
+<li><b>Tax rate:</b> tax must match the vendor's expected rate (8.25% Texas default, ±0.05 percentage points) unless your reviewer has set a different rate for that vendor.</li>
+<li><b>Duplicates:</b> checked against your full history, both for the same vendor and invoice number and for the same vendor and total within 7 days.</li>
+<li><b>Dates:</b> they must be real calendar dates, and stale or future-dated invoices are flagged.</li></ul>
+<p>Your WorkUnit Labs reviewer can change which fields are required for your account. Signed-in clients can see the current list under <a href="https://portal.workunitlabs.com/">Client login</a> → Invoice requirements.</p>
+<p><a class="btn btn-primary" href="https://portal.workunitlabs.com/start-pilot">Start Pilot · $99</a></p>
+</main>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <img src="/assets/logo-dark.png" alt="WorkUnit Labs" width="600" height="113">
+    <nav class="footer-links" aria-label="Legal">
+      <a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/security">Security</a><a href="/dpa">DPA</a><a href="/#contact">Contact</a>
+    </nav>
+    <p>© 2026 Dovewood Capital, LLC dba WorkUnit Labs · Fort Worth, TX · <a href="/cdn-cgi/l/email-protection#264f484049665149544d53484f524a4744550845494b"><span class="__cf_email__" data-cfemail="1871767e77586f776a736d76716c74797a6b367b7775">[email&#160;protected]</span></a></p>
+  </div>
+</footer>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/nav.js" defer></script>
+</body>
+</html>
