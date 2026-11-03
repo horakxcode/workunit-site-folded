@@ -1,7 +1,5 @@
-// Cube-assembly WUL. Same mount as the previous hero:
-// draws on #hero-canvas, adds .webgl-ready, still frame when reduced-motion.
-// Scene is the my.workunitlabs.com design (assemble, hold, scatter), framed
-// inside the existing hero stage instead of covering the page.
+// Cube-assembly WUL on the page's own white field. The canvas stays
+// transparent so the hero gradient behind the text shows through.
 import * as THREE from "three";
 
 const canvas = document.getElementById("hero-canvas");
@@ -32,11 +30,9 @@ function init() {
   renderer.toneMappingExposure = 1.25;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setClearColor(0x071422, 1);
+  renderer.setClearColor(0xffffff, 0);
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x071422);
-  scene.fog = new THREE.Fog(0x071422, 16, 38);
 
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
   camera.position.set(2.6, 3.4, 14.5);
@@ -64,11 +60,11 @@ function init() {
   floor.receiveShadow = true;
   scene.add(floor);
 
-  const grid = new THREE.GridHelper(30, 30, 0x102030, 0x0a1828);
+  const grid = new THREE.GridHelper(30, 30, 0xd5dee8, 0xeef3f8);
   grid.position.y = -0.02;
   scene.add(grid);
 
-  const COLORS = { navy: 0xbbd8ea, blue: 0x0e73c0, cyan: 0x148a95 };
+  const COLORS = { navy: 0x0b2d4b, blue: 0x1e7bff, cyan: 0x0ea5ff };
   const pitch = 0.55;
   const slot = (x, y, z = 0) => new THREE.Vector3((x - 2.2) * pitch, y * pitch, z * pitch);
   const layout = [];
@@ -85,8 +81,8 @@ function init() {
     roughness: 0.48,
     metalness: 0.06,
     color: 0xffffff,
-    emissive: 0x120818,
-    emissiveIntensity: 0.15,
+    emissive: 0x000000,
+    emissiveIntensity: 0,
   });
   const blocks = new THREE.InstancedMesh(geo, mat, layout.length);
   blocks.castShadow = true;
