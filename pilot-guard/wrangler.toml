@@ -1,0 +1,12 @@
+name = "workunit-pilot-guard"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# Stops a plain visit to the old pilot link from creating a Stripe Checkout session.
+[[routes]]
+pattern = "portal.workunitlabs.com/start-pilot"
+zone_name = "workunitlabs.com"
+
+[[routes]]
+pattern = "portal.workunitlabs.com/start-pilot/"
+zone_name = "workunitlabs.com"
