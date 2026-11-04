@@ -76,9 +76,7 @@ h3 { font-size: 18px; font-weight: 700; }
 .hero-art { position: relative; min-height: 560px; }
 .art-stage { position: absolute; inset: 0; }
 .art-3d { position: absolute; inset: 8% 4%; width: 92%; filter: drop-shadow(0 40px 50px rgba(11, 45, 75, .22)); animation: float 7s ease-in-out infinite; transition: opacity .6s; }
-#hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity .8s; cursor: grab; touch-action: pan-y; z-index: 1; }
-.webgl-ready #hero-canvas { opacity: 1; }
-.webgl-ready .art-3d { opacity: 0; animation: none; }
+#hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 1; cursor: grab; touch-action: pan-y; z-index: 1; }
 .hero-words { position: absolute; z-index: 3; left: 0; right: 0; top: 46%; transform: translateY(-50%); pointer-events: none; text-align: center; }
 .hero-word { position: absolute; left: 0; right: 0; margin: 0; font-family: var(--font); font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; font-size: clamp(36px, 4vw, 58px); color: #000; -webkit-font-smoothing: antialiased; opacity: 0; }
 .hero-word span { color: #2D6EF8; }

@@ -166,10 +166,40 @@ function init() {
   let shown = 0;
 
   const dummy = new THREE.Object3D();
-  const colorB = new THREE.Color();
   const tmp = new THREE.Vector3();
-  const lookY = [1.2, 1.2, 1.2];
-  const smooth = (t) => t * t * (3 - 2 * t);
+  let seed = 2.4;
+  const fromSeed = (index) => {
+    const n = (k) => Math.sin(seed * 127.1 + index * k) * 0.5 + 0.5;
+    return new THREE.Vector3((n(1.7) - 0.5) * 10, n(2.3) * 6 + 1, (n(3.1) - 0.5) * 6);
+  };
+  let built = reduceMotion;
+
+  function placeBuild(progress) {
+    const list = forms[0];
+    const fit = formScale[0];
+    for (let i = 0; i < count; i++) {
+      const cell = list[i];
+      if (!cell) {
+        tmp.set(0, 0, 0);
+        dummy.scale.setScalar(0);
+        color.setHex(0x000000);
+      } else {
+        const delay = (i / list.length) * 0.35;
+        const t = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
+        const eased = 1 - (1 - t) ** 2.2;
+        tmp.copy(fromSeed(i)).lerp(cell.p, eased);
+        dummy.scale.setScalar(t > 0.88 ? fit * (1 + (1 - t) * 0.06) : fit);
+        color.setHex(cell.c);
+      }
+      blocks.setColorAt(i, color);
+      dummy.position.copy(tmp);
+      dummy.rotation.set(0, 0, 0);
+      dummy.updateMatrix();
+      blocks.setMatrixAt(i, dummy.matrix);
+    }
+    blocks.instanceMatrix.needsUpdate = true;
+    if (blocks.instanceColor) blocks.instanceColor.needsUpdate = true;
+  }
 
   function placeHold() {
     const list = forms[form];
@@ -279,7 +309,13 @@ function init() {
     smoothX += (pointerX - smoothX) * 0.06;
     smoothY += (pointerY - smoothY) * 0.06;
     const cam = cameraAt(seconds);
-    placeHold();
+    if (!built) {
+      const p = Math.min(1, phaseElapsed / 3800);
+      placeBuild(p);
+      if (p >= 1) built = true;
+    } else {
+      placeHold();
+    }
     fitZ = 9.4;
 
     drifters.forEach((mesh) => {
