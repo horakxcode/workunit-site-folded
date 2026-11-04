@@ -187,11 +187,13 @@ function init() {
         const eased = 1 - (1 - t) ** 2.2;
         pos = fromSeed(i).lerp(cell.p, eased);
         if (t > 0.88) scale = 1 + (1 - t) * 0.06;
+        if (form !== 0 && t > 0.72) scale *= 1 - (t - 0.72) / 0.28;
       } else if (phase === "scatter") {
         pos = cell.p.clone().lerp(fromSeed(i + 137), progress);
-        scale = 1 - progress * 0.12;
+        scale = form === 0 ? 1 - progress * 0.12 : progress;
       } else {
         pos = cell.p;
+        if (form !== 0) scale = 0;
       }
       color.setHex(cell ? cell.c : 0x000000);
       blocks.setColorAt(i, color);
@@ -261,7 +263,7 @@ function init() {
     let reveal = 0;
     if (phase === "assemble") {
       const p = Math.min(1, phaseElapsed / 4000);
-      reveal = form === 0 ? 0 : p;
+      reveal = form === 0 ? 0 : Math.max(0, (p - 0.62) / 0.38);
       place(p, "assemble");
       if (p >= 1) { phase = "hold"; phaseElapsed = 0; }
     } else if (phase === "hold") {
@@ -279,7 +281,12 @@ function init() {
         seed = Math.random();
       }
     }
-    shown += (reveal - shown) * 0.16;
+    shown += (reveal - shown) * 0.18;
+    const wordEls = [null, document.getElementById("word-name"), document.getElementById("word-line")];
+    wordEls.forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = i === form ? String(shown) : "0";
+    });
 
     drifters.forEach((mesh) => {
       const base = mesh.userData.base;
