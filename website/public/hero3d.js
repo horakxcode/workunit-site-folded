@@ -1,5 +1,6 @@
 // Cubes stack into the WorkUnit logo mark, on the page white.
 import * as THREE from "three";
+import { RoomEnvironment } from "./vendor/three/RoomEnvironment.js";
 
 const canvas = document.getElementById("hero-canvas");
 const stage = canvas?.parentElement;
@@ -29,9 +30,12 @@ function init() {
   renderer.toneMappingExposure = 1.25;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setClearColor(0xffffff, 0);
+  renderer.setClearColor(0xf7faff, 0);
 
   const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  pmrem.dispose();
 
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
   camera.position.set(2.6, 3.4, 14.5);
@@ -59,15 +63,22 @@ function init() {
   }));
 
   const geo = new THREE.BoxGeometry(0.22, 0.22, 0.22);
-  const mat = new THREE.MeshStandardMaterial({
-    roughness: 0.48,
-    metalness: 0.06,
+  const mat = new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
-    emissive: 0x000000,
-    emissiveIntensity: 0,
+    roughness: 0.18,
+    metalness: 0,
+    transmission: 0.9,
+    thickness: 0.45,
+    ior: 1.45,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
+    transparent: true,
+    attenuationDistance: 0.4,
+    attenuationColor: 0xffffff,
+    envMapIntensity: 1.2,
   });
   const blocks = new THREE.InstancedMesh(geo, mat, layout.length);
-  blocks.castShadow = true;
+  blocks.castShadow = false;
   blocks.receiveShadow = false;
   scene.add(blocks);
 
@@ -78,10 +89,17 @@ function init() {
   });
   if (blocks.instanceColor) blocks.instanceColor.needsUpdate = true;
 
-  const driftMat = new THREE.MeshStandardMaterial({
-    roughness: 0.48,
-    metalness: 0.06,
-    color: 0x8aa4bc,
+  const driftMat = new THREE.MeshPhysicalMaterial({
+    color: 0xd5e6f5,
+    roughness: 0.18,
+    metalness: 0,
+    transmission: 0.92,
+    thickness: 0.3,
+    ior: 1.45,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
+    transparent: true,
+    envMapIntensity: 1.2,
   });
   const drifters = [];
   for (let i = 0; i < 12; i++) {
