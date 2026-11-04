@@ -144,9 +144,9 @@ function init() {
   }
 
   const keys = [
-    { x: 1.1, y: 3.2, z: 15.2, lx: 0.15, ly: 1.45, ry: -0.2 },
-    { x: 2.2, y: 2.1, z: 12.4, lx: 0.55, ly: 1.15, ry: -0.28 },
-    { x: 3, y: 2.5, z: 11.2, lx: 0.7, ly: 1.05, ry: -0.18 },
+    { x: 0.15, y: 2.2, z: 9, lx: 0, ly: 1.2, ry: -0.14 },
+    { x: 0.4, y: 1.9, z: 9, lx: 0.05, ly: 1.15, ry: -0.2 },
+    { x: 0.05, y: 2.4, z: 9, lx: 0, ly: 1.25, ry: -0.1 },
   ];
   const mix = (a, b, t) => a + (b - a) * t;
   function cameraAt(seconds) {
@@ -162,6 +162,7 @@ function init() {
     };
   }
 
+  let fitZ = 9;
   let phase = reduceMotion ? "hold" : "assemble";
   let phaseElapsed = reduceMotion ? 1000 : 0;
   let pointerX = 0, pointerY = 0, smoothX = 0, smoothY = 0, scrollY = 0;
@@ -176,6 +177,8 @@ function init() {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h, false);
+    const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
+    fitZ = (9.4 / 2) / (half * camera.aspect);
   }
 
   function frame(now) {
@@ -207,9 +210,9 @@ function init() {
     smoothY += (pointerY - smoothY) * 0.06;
     const scroll = Math.min(1, scrollY / (window.innerHeight * 1.5));
     const cam = cameraAt(seconds);
-    camera.position.x = cam.x + Math.sin(seconds * 0.22) * 0.45 + smoothX * 2.4;
-    camera.position.y = cam.y + Math.cos(seconds * 0.18) * 0.25 - scroll * 0.5 + smoothY * -1.1;
-    camera.position.z = cam.z + Math.sin(seconds * 0.35) * 0.7 - scroll * 1.4;
+    camera.position.x = cam.x + Math.sin(seconds * 0.22) * 0.12 + smoothX * 0.35;
+    camera.position.y = cam.y + Math.cos(seconds * 0.18) * 0.12 + smoothY * -0.2;
+    camera.position.z = fitZ;
     blocks.rotation.y = cam.ry + smoothX * 0.18;
     blocks.rotation.x = -0.08 + smoothY * 0.06;
     camera.lookAt(cam.lx + smoothX * 0.5, cam.ly + smoothY * -0.25, 0);
