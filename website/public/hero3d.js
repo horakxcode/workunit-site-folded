@@ -300,7 +300,7 @@ function init() {
     camera.position.z = (fitZ / 2) / (half * aspect);
     blocks.rotation.y = form === 0 ? cam.ry + smoothX * 0.18 : 0;
     blocks.rotation.x = form === 0 ? -0.08 + smoothY * 0.06 : 0;
-    camera.lookAt(cam.lx + smoothX * 0.5, cam.ly + smoothY * -0.25, 0);
+    camera.lookAt(cam.lx + smoothX * 0.5, form === 0 ? cam.ly + smoothY * -0.25 : 3.45, 0);
     renderer.render(scene, camera);
   }
 
