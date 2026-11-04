@@ -166,44 +166,66 @@ function init() {
   let shown = 0;
 
   const dummy = new THREE.Object3D();
-  let seed = Math.random();
-  const fromSeed = (index) => {
-    const n = (k) => Math.sin(seed * 127.1 + index * k) * 0.5 + 0.5;
-    return new THREE.Vector3((n(1.7) - 0.5) * 10, n(2.3) * 6 + 1, (n(3.1) - 0.5) * 6);
-  };
-  function place(progress, phase) {
+  const colorB = new THREE.Color();
+  const tmp = new THREE.Vector3();
+  const lookY = [1.2, 3.45, 3.45];
+  const smooth = (t) => t * t * (3 - 2 * t);
+
+  function placeHold() {
     const list = forms[form];
-    const next = (form + 1) % forms.length;
-    const ease = progress * progress * (3 - 2 * progress);
-    const fit = phase === "scatter"
-      ? formScale[form] + (formScale[next] - formScale[form]) * ease
-      : formScale[form];
+    const fit = formScale[form];
     for (let i = 0; i < count; i++) {
       const cell = list[i];
-      let pos;
-      let scale = 1;
-      if (!cell) {
-        pos = fromSeed(i);
-        scale = 0;
-      } else if (phase === "assemble") {
-        const delay = (i / list.length) * 0.35;
-        const t = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
-        const eased = 1 - (1 - t) ** 2.2;
-        pos = fromSeed(i).lerp(cell.p, eased);
-        if (t > 0.88) scale = 1 + (1 - t) * 0.06;
-        if (form !== 0 && t > 0.72) scale *= 1 - (t - 0.72) / 0.28;
-      } else if (phase === "scatter") {
-        pos = cell.p.clone().lerp(fromSeed(i + 137), progress);
-        const appear = form === 0 ? 1 : Math.min(1, progress / 0.2);
-        scale = appear * (1 - progress * 0.08);
+      if (cell) {
+        tmp.copy(cell.p);
+        dummy.scale.setScalar(fit);
+        color.setHex(cell.c);
       } else {
-        pos = cell.p;
-        if (form !== 0) scale = 0;
+        tmp.set(0, 0, 0);
+        dummy.scale.setScalar(0);
+        color.setHex(0x000000);
       }
-      color.setHex(cell ? cell.c : 0x000000);
       blocks.setColorAt(i, color);
-      dummy.position.copy(pos);
-      dummy.scale.setScalar(scale * fit);
+      dummy.position.copy(tmp);
+      dummy.rotation.set(0, 0, 0);
+      dummy.updateMatrix();
+      blocks.setMatrixAt(i, dummy.matrix);
+    }
+    blocks.instanceMatrix.needsUpdate = true;
+    if (blocks.instanceColor) blocks.instanceColor.needsUpdate = true;
+  }
+
+  function placeMorph(t) {
+    const next = (form + 1) % forms.length;
+    const e = smooth(t);
+    const from = forms[form];
+    const to = forms[next];
+    const fitA = formScale[form];
+    const fitB = formScale[next];
+    for (let i = 0; i < count; i++) {
+      const a = from[i];
+      const b = to[i];
+      let scale = 0;
+      if (a && b) {
+        tmp.copy(a.p).lerp(b.p, e);
+        scale = fitA + (fitB - fitA) * e;
+        color.setHex(a.c);
+        colorB.setHex(b.c);
+        color.lerp(colorB, e);
+      } else if (a) {
+        tmp.copy(a.p);
+        scale = fitA * (1 - e);
+        color.setHex(a.c);
+      } else if (b) {
+        tmp.copy(b.p);
+        scale = fitB * e;
+        color.setHex(b.c);
+      } else {
+        tmp.set(0, 0, 0);
+      }
+      blocks.setColorAt(i, color);
+      dummy.position.copy(tmp);
+      dummy.scale.setScalar(Math.max(scale, 0));
       dummy.rotation.set(0, 0, 0);
       dummy.updateMatrix();
       blocks.setMatrixAt(i, dummy.matrix);
@@ -231,9 +253,9 @@ function init() {
     };
   }
 
-  let fitZ = 9;
-  let phase = reduceMotion ? "hold" : "assemble";
-  let phaseElapsed = reduceMotion ? 1000 : 0;
+  let fitZ = 9.4;
+  let phase = "hold";
+  let phaseElapsed = 0;
   let pointerX = 0, pointerY = 0, smoothX = 0, smoothY = 0, scrollY = 0;
   let running = true;
   let raf = 0;
@@ -258,37 +280,32 @@ function init() {
     smoothY += (pointerY - smoothY) * 0.06;
     const cam = cameraAt(seconds);
     const next = (form + 1) % forms.length;
-    let scatterP = 0;
-    let reveal = 0;
-    if (phase === "assemble") {
-      const p = Math.min(1, phaseElapsed / 4500);
-      reveal = form === 0 ? 0 : Math.max(0, (p - 0.62) / 0.38);
-      place(p, "assemble");
-      if (p >= 1) { phase = "hold"; phaseElapsed = 0; }
-    } else if (phase === "hold") {
-      reveal = form === 0 ? 0 : 1;
-      place(1, "hold");
-      if (!reduceMotion && phaseElapsed > 7000) { phase = "scatter"; phaseElapsed = 0; }
-    } else {
-      const p = Math.min(1, phaseElapsed / 4500);
-      scatterP = p;
-      reveal = form === 0 ? 0 : 1 - p;
-      place(p, "scatter");
-      if (p >= 1) {
-        form = (form + 1) % forms.length;
-        phase = "assemble";
+    let morph = 0;
+    if (phase === "morph") {
+      morph = Math.min(1, phaseElapsed / 5600);
+      placeMorph(morph);
+      if (morph >= 1) {
+        form = next;
+        phase = "hold";
         phaseElapsed = 0;
-        seed = Math.random();
+        morph = 0;
+      }
+    } else {
+      placeHold();
+      if (!reduceMotion && phaseElapsed > 5200) {
+        phase = "morph";
+        phaseElapsed = 0;
       }
     }
-    const ease = scatterP * scatterP * (3 - 2 * scatterP);
-    const spanNow = spans[form] + (spans[next] - spans[form]) * ease;
-    fitZ += (spanNow - fitZ) * 0.18;
-    shown += (reveal - shown) * 0.18;
+    const e = smooth(morph);
+    fitZ = spans[form] + (spans[next] - spans[form]) * e;
     const wordEls = [null, document.getElementById("word-name"), document.getElementById("word-line")];
     wordEls.forEach((el, i) => {
       if (!el) return;
-      el.style.opacity = i === form ? String(shown) : "0";
+      const opacity = phase === "hold"
+        ? (form === i ? 1 : 0)
+        : (form === i ? 1 - e : next === i ? e : 0);
+      el.style.opacity = String(opacity);
     });
 
     drifters.forEach((mesh) => {
@@ -303,11 +320,12 @@ function init() {
     const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
     const aspect = camera.userData.aspect || camera.aspect || 1;
     camera.position.z = (fitZ / 2) / (half * aspect);
-    blocks.rotation.y = form === 0 ? cam.ry + smoothX * 0.18 : 0;
-    blocks.rotation.x = form === 0 ? -0.08 + smoothY * 0.06 : 0;
-    const lookFrom = form === 0 ? cam.ly + smoothY * -0.25 : 3.45;
-    const lookTo = next === 0 ? cam.ly + smoothY * -0.25 : 3.45;
-    camera.lookAt(cam.lx + smoothX * 0.5, lookFrom + (lookTo - lookFrom) * ease, 0);
+    const spin = form === 0 ? 1 - e : next === 0 ? e : 0;
+    blocks.rotation.y = (cam.ry + smoothX * 0.18) * spin;
+    blocks.rotation.x = (-0.08 + smoothY * 0.06) * spin;
+    const lookFrom = lookY[form] + (form === 0 ? smoothY * -0.25 : 0);
+    const lookTo = lookY[next] + (next === 0 ? smoothY * -0.25 : 0);
+    camera.lookAt(cam.lx + smoothX * 0.5, lookFrom + (lookTo - lookFrom) * e, 0);
     renderer.render(scene, camera);
   }
 
