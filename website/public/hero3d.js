@@ -173,7 +173,11 @@ function init() {
   };
   function place(progress, phase) {
     const list = forms[form];
-    const fit = formScale[form];
+    const next = (form + 1) % forms.length;
+    const ease = progress * progress * (3 - 2 * progress);
+    const fit = phase === "scatter"
+      ? formScale[form] + (formScale[next] - formScale[form]) * ease
+      : formScale[form];
     for (let i = 0; i < count; i++) {
       const cell = list[i];
       let pos;
@@ -190,7 +194,8 @@ function init() {
         if (form !== 0 && t > 0.72) scale *= 1 - (t - 0.72) / 0.28;
       } else if (phase === "scatter") {
         pos = cell.p.clone().lerp(fromSeed(i + 137), progress);
-        scale = form === 0 ? 1 - progress * 0.12 : progress;
+        const appear = form === 0 ? 1 : Math.min(1, progress / 0.2);
+        scale = appear * (1 - progress * 0.08);
       } else {
         pos = cell.p;
         if (form !== 0) scale = 0;
@@ -252,17 +257,11 @@ function init() {
     smoothX += (pointerX - smoothX) * 0.06;
     smoothY += (pointerY - smoothY) * 0.06;
     const cam = cameraAt(seconds);
-    const goal = spans[form];
-    fitZ += (goal - fitZ) * 0.05;
-    const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
-    const aspect = camera.userData.aspect || camera.aspect || 1;
-    const halfH = (fitZ / 2) / Math.max(aspect, 0.6);
-    const labelY = cam.ly + halfH * 0.46;
-    focus.set(cam.lx, labelY, 0);
-
+    const next = (form + 1) % forms.length;
+    let scatterP = 0;
     let reveal = 0;
     if (phase === "assemble") {
-      const p = Math.min(1, phaseElapsed / 4000);
+      const p = Math.min(1, phaseElapsed / 4500);
       reveal = form === 0 ? 0 : Math.max(0, (p - 0.62) / 0.38);
       place(p, "assemble");
       if (p >= 1) { phase = "hold"; phaseElapsed = 0; }
@@ -271,7 +270,8 @@ function init() {
       place(1, "hold");
       if (!reduceMotion && phaseElapsed > 7000) { phase = "scatter"; phaseElapsed = 0; }
     } else {
-      const p = Math.min(1, phaseElapsed / 4000);
+      const p = Math.min(1, phaseElapsed / 4500);
+      scatterP = p;
       reveal = form === 0 ? 0 : 1 - p;
       place(p, "scatter");
       if (p >= 1) {
@@ -281,6 +281,9 @@ function init() {
         seed = Math.random();
       }
     }
+    const ease = scatterP * scatterP * (3 - 2 * scatterP);
+    const spanNow = spans[form] + (spans[next] - spans[form]) * ease;
+    fitZ += (spanNow - fitZ) * 0.18;
     shown += (reveal - shown) * 0.18;
     const wordEls = [null, document.getElementById("word-name"), document.getElementById("word-line")];
     wordEls.forEach((el, i) => {
@@ -297,10 +300,14 @@ function init() {
 
     camera.position.x = cam.x + Math.sin(seconds * 0.22) * 0.12 + smoothX * 0.35;
     camera.position.y = cam.y + Math.cos(seconds * 0.18) * 0.12 + smoothY * -0.2;
+    const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
+    const aspect = camera.userData.aspect || camera.aspect || 1;
     camera.position.z = (fitZ / 2) / (half * aspect);
     blocks.rotation.y = form === 0 ? cam.ry + smoothX * 0.18 : 0;
     blocks.rotation.x = form === 0 ? -0.08 + smoothY * 0.06 : 0;
-    camera.lookAt(cam.lx + smoothX * 0.5, form === 0 ? cam.ly + smoothY * -0.25 : 3.45, 0);
+    const lookFrom = form === 0 ? cam.ly + smoothY * -0.25 : 3.45;
+    const lookTo = next === 0 ? cam.ly + smoothY * -0.25 : 3.45;
+    camera.lookAt(cam.lx + smoothX * 0.5, lookFrom + (lookTo - lookFrom) * ease, 0);
     renderer.render(scene, camera);
   }
 
