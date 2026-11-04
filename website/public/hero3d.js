@@ -1,6 +1,5 @@
 // Cubes assemble into the WorkUnit mark (four blades) on the white page.
 import * as THREE from "three";
-import { RoundedBoxGeometry } from "./vendor/three/RoundedBoxGeometry.js";
 
 const canvas = document.getElementById("hero-canvas");
 const stage = canvas?.parentElement;
@@ -59,7 +58,7 @@ function init() {
     c: COLORS[blade],
   }));
 
-  const geo = new RoundedBoxGeometry(0.3, 0.3, 0.3, 2, 0.045);
+  const geo = new THREE.BoxGeometry(0.34, 0.34, 0.34);
   const mat = new THREE.MeshStandardMaterial({
     roughness: 0.48,
     metalness: 0.06,
