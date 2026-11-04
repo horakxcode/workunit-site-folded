@@ -280,7 +280,7 @@ function inputToday() {
   return new Date().toISOString().slice(0, 10);
 }
 
-const isMain = process.argv[1] && process.argv[1].endsWith("check.js");
+const isMain = typeof process !== "undefined" && process.argv?.[1]?.endsWith("check.js");
 if (isMain && process.argv[2]) {
   const fs = await import("node:fs");
   const input = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
