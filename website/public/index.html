@@ -53,6 +53,11 @@
 </header>
 
 <main>
+  <section class="lab" id="lab" aria-label="Hold either side to move through the sketches">
+    <p class="lab-hint"><- Tap and hold left and right to move -></p>
+    <div class="lab-world" id="lab-world"><div class="lab-ground"></div></div>
+  </section>
+
   <!-- ===== HERO ===== -->
   <section class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
@@ -501,6 +506,7 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js" } }</script>
+<script src="sketch.js" defer></script>
 <script src="main.js" defer></script>
 <script type="module" src="hero3d.js"></script>
 <script src="/nav.js" defer></script>
