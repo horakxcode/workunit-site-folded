@@ -58,7 +58,7 @@ function init() {
     c: COLORS[blade],
   }));
 
-  const geo = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+  const geo = new THREE.BoxGeometry(0.22, 0.22, 0.22);
   const mat = new THREE.MeshStandardMaterial({
     roughness: 0.48,
     metalness: 0.06,
