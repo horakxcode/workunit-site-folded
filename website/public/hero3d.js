@@ -73,7 +73,7 @@ function init() {
     c: COLORS[blade],
   }));
   const forms = [layout, word, line];
-  const spans = [9.4, 23.87, 50.31];
+  const spans = [9.4, 16, 20];
   let form = 0;
 
 
@@ -115,6 +115,55 @@ function init() {
     drifters.push(mesh);
   }
 
+  function makeLabel(parts) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const draw = () => {
+      const font = "700 200px Inter, sans-serif";
+      ctx.font = font;
+      const gap = 48;
+      const widths = parts.map((part) => ctx.measureText(part.text).width);
+      const textW = widths.reduce((sum, w) => sum + w, 0) + gap * (parts.length - 1);
+      canvas.width = Math.ceil(textW + 80);
+      canvas.height = 280;
+      ctx.font = font;
+      ctx.textBaseline = "middle";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let x = 40;
+      parts.forEach((part, i) => {
+        ctx.fillStyle = part.color;
+        ctx.fillText(part.text, x, canvas.height / 2 + 8);
+        x += widths[i] + gap;
+      });
+      if (mesh.material.map) mesh.material.map.needsUpdate = true;
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.PlaneGeometry(1, canvas.height / canvas.width);
+    };
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const material = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0 });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
+    mesh.visible = false;
+    scene.add(mesh);
+    draw();
+    if (document.fonts?.ready) document.fonts.ready.then(draw);
+    return mesh;
+  }
+
+  const labels = [
+    null,
+    makeLabel([
+      { text: "WorkUnit", color: "#000000" },
+      { text: "Labs", color: "#2D6EF8" },
+    ]),
+    makeLabel([
+      { text: "Intelligence", color: "#000000" },
+      { text: "Priced by Outcome", color: "#2D6EF8" },
+    ]),
+  ];
+  const focus = new THREE.Vector3();
+  let shown = 0;
+
   const dummy = new THREE.Object3D();
   let seed = Math.random();
   const fromSeed = (index) => {
@@ -122,12 +171,28 @@ function init() {
     return new THREE.Vector3((n(1.7) - 0.5) * 10, n(2.3) * 6 + 1, (n(3.1) - 0.5) * 6);
   };
   function place(progress, phase) {
+    const solid = form !== 0;
     const list = forms[form];
     for (let i = 0; i < count; i++) {
       const cell = list[i];
       let pos;
       let scale = 1;
-      if (!cell) {
+      if (solid) {
+        const from = fromSeed(phase === "scatter" ? i + 137 : i);
+        if (phase === "assemble") {
+          const delay = (i / count) * 0.35;
+          const t = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
+          const eased = 1 - (1 - t) ** 2.2;
+          pos = from.lerp(focus, eased);
+          scale = 1 - eased;
+        } else if (phase === "scatter") {
+          pos = focus.clone().lerp(from, progress);
+          scale = progress;
+        } else {
+          pos = focus;
+          scale = 0;
+        }
+      } else if (!cell) {
         pos = fromSeed(i);
         scale = 0;
       } else if (phase === "assemble") {
@@ -195,15 +260,31 @@ function init() {
     const dt = Math.min(50, now - last);
     last = now;
     phaseElapsed += dt;
+    const seconds = now * 0.001;
+    smoothX += (pointerX - smoothX) * 0.06;
+    smoothY += (pointerY - smoothY) * 0.06;
+    const cam = cameraAt(seconds);
+    const goal = spans[form];
+    fitZ += (goal - fitZ) * 0.05;
+    const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
+    const aspect = camera.userData.aspect || camera.aspect || 1;
+    const halfH = (fitZ / 2) / Math.max(aspect, 0.6);
+    const labelY = cam.ly + halfH * 0.46;
+    focus.set(cam.lx, labelY, 0);
+
+    let reveal = 0;
     if (phase === "assemble") {
       const p = Math.min(1, phaseElapsed / 4000);
+      reveal = form === 0 ? 0 : p;
       place(p, "assemble");
       if (p >= 1) { phase = "hold"; phaseElapsed = 0; }
     } else if (phase === "hold") {
+      reveal = form === 0 ? 0 : 1;
       place(1, "hold");
       if (!reduceMotion && phaseElapsed > 7000) { phase = "scatter"; phaseElapsed = 0; }
     } else {
       const p = Math.min(1, phaseElapsed / 4000);
+      reveal = form === 0 ? 0 : 1 - p;
       place(p, "scatter");
       if (p >= 1) {
         form = (form + 1) % forms.length;
@@ -212,6 +293,7 @@ function init() {
         seed = Math.random();
       }
     }
+    shown += (reveal - shown) * 0.16;
 
     drifters.forEach((mesh) => {
       const base = mesh.userData.base;
@@ -220,21 +302,26 @@ function init() {
       mesh.rotation.y = now * 0.0004;
     });
 
-    const seconds = now * 0.001;
-    smoothX += (pointerX - smoothX) * 0.06;
-    smoothY += (pointerY - smoothY) * 0.06;
-    const scroll = Math.min(1, scrollY / (window.innerHeight * 1.5));
-    const cam = cameraAt(seconds);
     camera.position.x = cam.x + Math.sin(seconds * 0.22) * 0.12 + smoothX * 0.35;
     camera.position.y = cam.y + Math.cos(seconds * 0.18) * 0.12 + smoothY * -0.2;
-    const goal = spans[form];
-    fitZ += (goal - fitZ) * 0.05;
-    const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
-    const aspect = camera.userData.aspect || camera.aspect || 1;
     camera.position.z = (fitZ / 2) / (half * aspect);
-    blocks.rotation.y = cam.ry + smoothX * 0.18;
-    blocks.rotation.x = -0.08 + smoothY * 0.06;
+    blocks.rotation.y = form === 0 ? cam.ry + smoothX * 0.18 : 0;
+    blocks.rotation.x = form === 0 ? -0.08 + smoothY * 0.06 : 0;
     camera.lookAt(cam.lx + smoothX * 0.5, cam.ly + smoothY * -0.25, 0);
+
+    const width = fitZ * (form === 2 ? 0.96 : 0.84);
+    labels.forEach((label, i) => {
+      if (!label) return;
+      const on = i === form;
+      if (!on) label.material.opacity = Math.max(0, label.material.opacity - 0.12);
+      else label.material.opacity = shown;
+      label.visible = label.material.opacity > 0.01;
+      if (!label.visible) return;
+      const textH = width * label.geometry.parameters.height;
+      const y = Math.min(labelY, cam.ly + halfH - textH * 0.65);
+      label.position.set(cam.lx, y, 0.4);
+      label.scale.set(width, width, 1);
+    });
     renderer.render(scene, camera);
   }
 
