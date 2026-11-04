@@ -74,7 +74,7 @@ h3 { font-size: 18px; font-weight: 700; }
 
 .hero-art { position: relative; min-height: 560px; display: grid; place-items: center; }
 /* On desktop the model is the hero: the stage runs past its column toward the right edge */
-.art-stage { position: relative; width: 122%; aspect-ratio: 1.15; max-width: 820px; justify-self: start; margin-left: -4%; background: #071422; }
+.art-stage { position: relative; width: 122%; aspect-ratio: 1.15; max-width: 820px; justify-self: start; margin-left: -4%; background: linear-gradient(180deg, #F7FAFF 0%, var(--white) 100%); }
 .art-3d { position: absolute; inset: 8% 4%; width: 92%; filter: drop-shadow(0 40px 50px rgba(11, 45, 75, .22)); animation: float 7s ease-in-out infinite; transition: opacity .6s; }
 #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity .8s; cursor: grab; touch-action: pan-y; z-index: 1; }
 .webgl-ready #hero-canvas { opacity: 1; }

@@ -1,4 +1,4 @@
-// Cubes stack into the WorkUnit logo mark, on the dark field.
+// Cubes stack into the WorkUnit logo mark, on the page white.
 import * as THREE from "three";
 
 const canvas = document.getElementById("hero-canvas");
@@ -29,11 +29,9 @@ function init() {
   renderer.toneMappingExposure = 1.25;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setClearColor(0x071422, 1);
+  renderer.setClearColor(0xffffff, 0);
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x071422);
-  scene.fog = new THREE.Fog(0x071422, 16, 38);
 
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
   camera.position.set(2.6, 3.4, 14.5);
@@ -51,19 +49,6 @@ function init() {
   const fill = new THREE.DirectionalLight(0x4a90d0, 0.35);
   fill.position.set(-6, 2.5, -4);
   scene.add(fill);
-
-  const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(20, 8),
-    new THREE.ShadowMaterial({ opacity: 0.35 })
-  );
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = -0.05;
-  floor.receiveShadow = true;
-  scene.add(floor);
-
-  const grid = new THREE.GridHelper(30, 30, 0x102030, 0x0a1828);
-  grid.position.y = -0.02;
-  scene.add(grid);
 
   const COLORS = [0x16324f, 0x1e4570, 0x2a5a8a, 0x4da3ff];
   const pitch = 0.34;
@@ -93,9 +78,14 @@ function init() {
   });
   if (blocks.instanceColor) blocks.instanceColor.needsUpdate = true;
 
+  const driftMat = new THREE.MeshStandardMaterial({
+    roughness: 0.48,
+    metalness: 0.06,
+    color: 0x8aa4bc,
+  });
   const drifters = [];
   for (let i = 0; i < 12; i++) {
-    const mesh = new THREE.Mesh(geo, mat);
+    const mesh = new THREE.Mesh(geo, driftMat);
     mesh.position.set((Math.random() - 0.5) * 16, Math.random() * 6 + 1, (Math.random() - 0.5) * 6);
     mesh.scale.setScalar(0.35 + Math.random() * 0.25);
     mesh.userData.base = mesh.position.clone();
