@@ -24,9 +24,6 @@ export function checkInvoice(input) {
   for (const [key, label] of REQUIRED) {
     if (blank(extraction[key])) flag("REQUIRED_MISSING", key, label);
   }
-  if (blank(extraction.dueDate) && blank(extraction.paymentTerms)) {
-    flag("REQUIRED_MISSING", "dueDate", "due date or payment terms");
-  }
   const lines = Array.isArray(extraction.lineItems) ? extraction.lineItems : [];
   if (!lines.some((line) => cents(line.amount) !== null)) {
     flag("REQUIRED_MISSING", "lineItems", "at least one line item with an amount");
@@ -42,7 +39,11 @@ export function checkInvoice(input) {
   checkVendor(extraction, input, flag);
   checkDuplicates(extraction, input.history || [], flag);
 
-  const units = input.units || { ap: true, cash: true, close: true };
+  const units = input.units || {
+    ap: Array.isArray(input.purchaseOrders) && input.purchaseOrders.length > 0,
+    cash: Array.isArray(input.payments) && input.payments.length > 0,
+    close: Array.isArray(input.closeSupport) && input.closeSupport.length > 0,
+  };
   if (units.ap !== false) checkAp(extraction, input, flag);
   if (units.cash !== false) checkCash(extraction, input.payments || [], flag);
   if (units.close !== false) checkClose(input.closeSupport, flag);
@@ -95,7 +96,7 @@ function checkMath(extraction, lines, flag) {
 }
 
 function checkVendor(extraction, input, flag) {
-  if (input.vendorChecks === false) return;
+  if (input.vendorChecks === false || !input.vendorProfile) return;
   const profile = input.vendorProfile || {};
   const expectedCurrency = norm(profile.currency || DEFAULT_CURRENCY).toUpperCase();
   const currency = norm(extraction.currency).toUpperCase();

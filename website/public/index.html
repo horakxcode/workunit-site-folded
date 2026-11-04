@@ -4,32 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WorkUnit Labs: Invoices in, clean books out</title>
-<meta name="description" content="Modular AI operations. Delivered as completed work. and AP firms. Every invoice extracted, math-checked and delivered ready to import into QuickBooks Online or Xero. Unclear fields are flagged, never guessed. Pay only for invoices that pass.">
+<meta name="description" content="Checked, ready-to-import invoice entries for bookkeeping and AP firms. Pay only for invoices we deliver as accepted.">
 <link rel="canonical" href="https://workunitlabs.com/">
 <meta name="theme-color" content="#FFFFFF">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://workunitlabs.com/">
 <meta property="og:title" content="WorkUnit Labs: Invoices in, clean books out">
-<meta property="og:description" content="Checked, ready-to-import invoice entries for bookkeeping and AP firms. Pay only for invoices that pass every check.">
+<meta property="og:description" content="Checked, ready-to-import invoice entries for bookkeeping and AP firms. Pay only for invoices we deliver as accepted.">
 <meta property="og:image" content="https://workunitlabs.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Organization","name":"WorkUnit Labs","legalName":"Dovewood Capital, LLC","url":"https://workunitlabs.com/","email":"info@workunitlabs.com","address":{"@type":"PostalAddress","addressLocality":"Fort Worth","addressRegion":"TX","addressCountry":"US"}},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What counts as an accepted invoice?","acceptedAnswer":{"@type":"Answer","text":"An invoice we deliver as accepted: it passed every check, or it failed a check and was then fixed and confirmed. Invoices we cannot confirm come back flagged and are not billed."}},
+{"@type":"Question","name":"How much does each invoice cost?","acceptedAnswer":{"@type":"Answer","text":"Pilot is $99 one time for up to 200 invoices. Practice is $199 per month with 150 accepted invoices included and $1.25 each after that. Firm is $499 per month with 400 included and $1.10 each after that. 15,000 or more a month is quoted on an annual contract."}},
+{"@type":"Question","name":"How fast is turnaround?","acceptedAnswer":{"@type":"Answer","text":"The target is one business day. It is a target, not a guarantee. Large backlogs are scheduled in stages."}}
+]}
+]}
+</script>
 </head>
 <body>
-
-<!-- ===================================================================
-     EDITING TIP: all the words on the site live in this file.
-     Each section starts with a comment like  ===== HERO =====
-     Change the text between the tags, save, and redeploy (see EDITING.md).
-     Colors and fonts are at the top of styles.css.
-     Prices also appear in main.js (savings calculator): keep them in sync.
-     =================================================================== -->
 
 <!-- ===== NAVIGATION ===== -->
 <header class="nav" id="top">
@@ -46,7 +45,7 @@
     </nav>
     <div class="nav-actions">
       <a class="nav-login" href="https://portal.workunitlabs.com/">Client login</a>
-      <a class="btn btn-primary nav-start" href="https://portal.workunitlabs.com/start-pilot">Start Pilot</a>
+      <a class="btn btn-primary nav-start" href="/#pilot">Start Pilot</a>
       <button class="nav-toggle" type="button" aria-controls="site-menu" aria-expanded="false" aria-label="Open menu"><span></span></button>
     </div>
   </div>
@@ -60,9 +59,9 @@
       <div class="hero-copy">
         <p class="eyebrow reveal">Modular AI operations. Delivered as completed work.</p>
         <h1 class="reveal">Invoices in.<br><span class="grad">Clean books<br>out.</span></h1>
-        <p class="lede reveal">Send us your clients' invoices. We return finished, checked entries ready to import into QuickBooks Online or Xero. Every invoice is math-checked, duplicates are caught, and anything unclear is flagged, never guessed. You pay only for invoices that pass. Invoices are the first WorkUnit. Every unit we add uses the same intake, checks, and delivery.</p>
+        <p class="lede reveal">Send us your clients' invoices. We return finished, checked entries ready to import into QuickBooks Online or Xero. Every invoice is math-checked, duplicates are caught, and anything unclear is flagged, never guessed. You pay only for invoices we deliver as accepted.</p>
         <div class="ctas reveal">
-          <a class="btn btn-primary btn-lg" href="https://portal.workunitlabs.com/start-pilot">Start Pilot · $99</a>
+          <a class="btn btn-primary btn-lg" href="/#pilot">Start Pilot · $99</a>
           <a class="btn btn-ghost btn-lg" href="#savings">Estimate your savings</a>
         </div>
         <ul class="trust reveal">
@@ -85,7 +84,7 @@
   <section class="band">
     <div class="wrap stats">
       <div class="stat reveal"><b data-count="7">7</b><span>checks on every invoice</span></div>
-      <div class="stat reveal"><b data-count="0" data-prefix="$">$0</b><span>for invoices that fail a check</span></div>
+      <div class="stat reveal"><b data-count="0" data-prefix="$">$0</b><span>for invoices we send back unaccepted</span></div>
       <div class="stat reveal"><b data-count="24" data-suffix="h">24h</b><span>target turnaround</span></div>
       <div class="stat reveal"><b data-count="0">0</b><span>guessed values</span></div>
     </div>
@@ -112,8 +111,8 @@
       <div class="how">
         <ol class="steps">
           <li class="step reveal"><span class="num">1</span><div><h3>Forward or upload</h3><p>Email invoices to a private intake address for each client, or drop them in a shared folder. PDFs, scans and phone photos all work.</p></div></li>
-          <li class="step reveal"><span class="num">2</span><div><h3>Three checks run on every file</h3><p>AP Match compares the invoice to the purchase order and the receipt. Cash Match applies the payment to the open invoice. CloseReady lists anything still missing before month-end. A miss is flagged. It is not guessed, and it is not billed.</p></div></li>
-          <li class="step reveal"><span class="num">3</span><div><h3>Import and move on</h3><p>Get vendor, dates, totals, tax and every line item as a QuickBooks- or Xero-ready file, typically within one business day.</p></div></li>
+          <li class="step reveal"><span class="num">2</span><div><h3>We extract, then seven checks run</h3><p>The model reads every field and line. The rules then check totals, line math, required fields, duplicates, dates, currency, and tax. A miss is flagged for review, never guessed. AP Match, Cash Match, and CloseReady run only when you also send the purchase order, the receipt, the payment, or the close file. An invoice is not failed for lacking a document you did not send.</p></div></li>
+          <li class="step reveal"><span class="num">3</span><div><h3>Import and move on</h3><p>Get vendor, dates, totals, tax and every line item as a QuickBooks- or Xero-ready file. The target is one business day. Large batches are scheduled.</p></div></li>
         </ol>
         <!-- Animated demo: an invoice being read and checked -->
         <div class="demo reveal" aria-label="Animation of an invoice being checked">
@@ -125,16 +124,15 @@
               <div class="doc-row"><span>Scrub laundering (40 lbs)</span><span>$74.00</span></div>
               <div class="doc-row"><span>Lab coat rental</span><span>$32.50</span></div>
             </div>
-            <div class="doc-total"><span>Total due</span><b>$205.50</b></div>
+            <div class="doc-total"><span>Total due</span><b>$220.50</b></div>
             <div class="scan"></div>
           </div>
           <div class="checks-live">
             <div class="cl" style="--d:0"><i class="dot ok"></i>Line math</div>
-            <div class="cl" style="--d:1"><i class="dot ok"></i>AP Match: PO and receipt agree</div>
-            <div class="cl" style="--d:2"><i class="dot ok"></i>Cash Match: payment applied</div>
-            <div class="cl" style="--d:3"><i class="dot ok"></i>CloseReady: support is complete</div>
-            <div class="cl" style="--d:4"><i class="dot warn"></i>Date 03/10: flagged for review</div>
-            <div class="cl result" style="--d:5">Reviewer confirmed Oct 3 · <b>Ready to import</b></div>
+            <div class="cl" style="--d:1"><i class="dot ok"></i>Lines equal the total</div>
+            <div class="cl" style="--d:2"><i class="dot ok"></i>Not a duplicate</div>
+            <div class="cl" style="--d:3"><i class="dot warn"></i>Date 03/10: flagged for review</div>
+            <div class="cl result" style="--d:4">Confirmed Oct 3 · <b>Ready to import</b></div>
           </div>
         </div>
       </div>
@@ -190,9 +188,9 @@
       <p class="eyebrow reveal">Quality control</p>
       <h2 class="reveal">Three layers of checking on every batch.</h2>
       <div class="layers">
-        <div class="layer reveal"><span class="layer-n">1</span><h3>Rules check every invoice</h3><p>Seven automatic checks run on every document. We don't rely on the AI to tell us when it's unsure; the math has to work.</p></div>
-        <div class="layer reveal"><span class="layer-n">2</span><h3>People review the exceptions</h3><p>Anything that fails a check goes to a reviewer who fixes it, confirms it, or sends it back to you with the reason.</p></div>
-        <div class="layer reveal"><span class="layer-n">3</span><h3>Spot checks on accepted work</h3><p>We re-check a random sample of invoices that passed, so we know our real accuracy, and every error we find becomes a new rule.</p></div>
+        <div class="layer reveal"><span class="layer-n">1</span><h3>Rules check every invoice</h3><p>Seven automatic checks run on every document. A blurry or cut-off value is flagged, never filled in. The math has to work.</p></div>
+        <div class="layer reveal"><span class="layer-n">2</span><h3>Exceptions are reviewed</h3><p>Anything that fails a check is reviewed by WorkUnit Labs. We fix it, confirm it, or send it back with the reason.</p></div>
+        <div class="layer reveal"><span class="layer-n">3</span><h3>Spot checks on accepted work</h3><p>We re-check a sample of accepted invoices. An error we find becomes a new rule.</p></div>
       </div>
       <h3 class="checks-title reveal">An invoice is billable only if it passes every check</h3>
       <div class="checks">
@@ -201,10 +199,11 @@
         <div class="check reveal"><span class="ic">✓</span><h3>Required fields present</h3><p>Vendor, invoice number, date and total, every time.</p></div>
         <div class="check reveal"><span class="ic">⧉</span><h3>No duplicates</h3><p>The same vendor and invoice number is caught across batches.</p></div>
         <div class="check reveal"><span class="ic">◷</span><h3>Dates make sense</h3><p>Readable, not stale, not in the future, due after issued.</p></div>
-        <div class="check reveal"><span class="ic">?</span><h3>Nothing guessed</h3><p>Blurry or cut-off values are flagged, never filled in.</p></div>
+        <div class="check reveal"><span class="ic">$</span><h3>Currency matches</h3><p>The currency matches that vendor's profile, once a profile exists. Until then, the currency on the invoice stands.</p></div>
+        <div class="check reveal"><span class="ic">%</span><h3>Tax matches the profile</h3><p>Tax is checked against a saved vendor rate. A stated zero is accepted until a profile says otherwise.</p></div>
       </div>
       <div class="guarantee reveal">
-        <b>Our guarantee:</b> invoices that fail a check aren't billed, and if an invoice we accepted turns out to be wrong, tell us and we'll credit it.
+        <b>Our guarantee:</b> you pay only for invoices we deliver as accepted. If an accepted invoice turns out to be wrong, tell us and we'll credit it.
       </div>
     </div>
   </section>
@@ -218,12 +217,12 @@
         <table class="compare-table">
           <thead><tr><th></th><th>Manual entry</th><th>Capture app</th><th class="us-col">WorkUnit Labs</th></tr></thead>
           <tbody>
-            <tr><th>Who checks each field</th><td>Your team</td><td>Your team</td><td class="us-col">Our rules and reviewers</td></tr>
+            <tr><th>Who checks each field</th><td>Your team</td><td>Your team</td><td class="us-col">Our rules, then a review of exceptions</td></tr>
             <tr><th>Line-item detail</th><td>If someone has time</td><td>Often skipped or merged</td><td class="us-col">Every line, every time</td></tr>
             <tr><th>Totals that don't add up</th><td>Caught at month-end, maybe</td><td>Passed through silently</td><td class="us-col">Flagged before delivery</td></tr>
             <tr><th>Duplicate invoices</th><td>Easy to miss</td><td>Sometimes caught</td><td class="us-col">Caught across batches</td></tr>
             <tr><th>Phone photos and messy scans</th><td>Slow</td><td>Hit or miss</td><td class="us-col">Read, checked, or flagged</td></tr>
-            <tr><th>What you pay for</th><td>Staff hours</td><td>Seats or documents, right or wrong</td><td class="us-col">Only invoices that pass</td></tr>
+            <tr><th>What you pay for</th><td>Staff hours</td><td>Seats or documents, right or wrong</td><td class="us-col">Only invoices delivered as accepted</td></tr>
           </tbody>
         </table>
       </div>
@@ -252,14 +251,14 @@
       </div>
       <div class="calc-result reveal" aria-live="polite">
         <div class="cr-row"><span>Your cost today</span><b id="r-current">$1,400</b></div>
-        <div class="cr-row"><span id="r-plan-label">WorkUnit Labs (Practice plan)</span><b id="r-ours">$379</b></div>
-        <div class="cr-save"><span id="r-save-label">Estimated monthly savings</span><b id="r-save">$1,021</b></div>
+        <div class="cr-row"><span id="r-plan-label">WorkUnit Labs (Firm plan)</span><b id="r-ours">$719</b></div>
+        <div class="cr-save"><span id="r-save-label">Estimated monthly savings</span><b id="r-save">$681</b></div>
         <div class="cr-meta">
           <div><b id="r-hours">40</b><span>staff hours freed each month</span></div>
-          <div><b id="r-per">$0.63</b><span>per invoice with us</span></div>
+          <div><b id="r-per">$1.20</b><span>per invoice with us</span></div>
         </div>
-        <p class="cr-fine">Estimate only. Assumes every invoice passes; invoices that fail a check aren't billed, so your actual cost can only be lower. Your team still posts entries and approves payments.</p>
-        <a class="btn btn-primary" href="https://portal.workunitlabs.com/start-pilot">Test it on 200 invoices for $99</a>
+        <p class="cr-fine">Estimate only. You pay for invoices we deliver as accepted, so a sent-back invoice is not in this price. Your team still posts entries and approves payments.</p>
+        <a class="btn btn-primary" href="/#pilot">Test it on 200 invoices for $99</a>
       </div>
     </div>
   </section>
@@ -269,7 +268,7 @@
     <div class="wrap">
       <p class="eyebrow reveal">Pricing</p>
       <h2 class="reveal">Priced by the invoice, not the seat.</h2>
-      <p class="lede reveal">No setup fees. No contracts. Invoices that fail a check are always free. See the <a href="/requirements">invoice field requirements</a> every invoice is checked against.</p>
+      <p class="lede reveal">No setup fees. No contracts. You pay only for invoices we deliver as accepted. See the <a href="/requirements">invoice field requirements</a> every invoice is checked against.</p>
       <div class="plans four">
         <div class="plan featured reveal">
           <span class="badge">Start here</span>
@@ -277,14 +276,14 @@
           <div class="price">$99</div>
           <div class="per">one time · 30 days</div>
           <ul><li>Up to 200 invoices</li><li>Full line-item extraction</li><li>QuickBooks / Xero-ready files</li><li>Results report: accuracy and time saved</li></ul>
-          <a class="btn btn-primary" href="https://portal.workunitlabs.com/start-pilot">Start Pilot</a>
+          <a class="btn btn-primary" href="/#pilot">Start Pilot</a>
         </div>
         <div class="plan reveal">
           <h3>Practice</h3>
           <div class="price">$199<small>/mo</small></div>
           <div class="per">150 accepted invoices included · $1.25 each after</div>
           <div class="eff">$1.33 per included invoice</div>
-          <ul><li>Everything in Pilot</li><li>Private intake inbox per client</li><li>Typically within one business day</li><li>Duplicate detection across batches</li></ul>
+          <ul><li>Everything in Pilot</li><li>Private intake inbox per client</li><li>Target of one business day</li><li>Duplicate detection across batches</li></ul>
           <a class="btn btn-ghost" href="#pilot">Talk to us</a>
         </div>
         <div class="plan reveal">
@@ -305,20 +304,18 @@
       </div>
 
       <div class="vol reveal" id="volume">
-        <h3>Cost per invoice by monthly volume</h3>
-        <p class="vol-sub">Volume pricing for firms that process more than the Firm plan's 400 invoices a month. The price is per accepted invoice and is based on your monthly volume. <a href="#contact">Contact us</a> for a quote.</p>
+        <h3>Above the Firm plan</h3>
+        <p class="vol-sub">Up to 15,000 accepted invoices a month, stay on Firm: $499 plus $1.10 for each invoice after 400. A separate volume price starts only where it is lower than that.</p>
         <div class="vol-scroll"><table class="vol-table">
-          <thead><tr><th scope="col">Accepted invoices per month</th><th scope="col">Price per invoice</th><th scope="col">Example volume</th><th scope="col">Example monthly cost</th></tr></thead>
+          <thead><tr><th scope="col">Accepted invoices per month</th><th scope="col">Price</th><th scope="col">Example</th></tr></thead>
           <tbody>
-          <tr><th scope="row">1–1,000</th><td>$1.40</td><td>500</td><td>$700</td></tr>
-          <tr><th scope="row">1,000–5,000</th><td>$1.25</td><td>3,000</td><td>$3,750</td></tr>
-          <tr><th scope="row">5,000–15,000</th><td>$1.10</td><td>10,000</td><td>$11,000</td></tr>
-          <tr><th scope="row">15,000+</th><td>$0.95–$1.00 (annual contract)</td><td>20,000</td><td>$19,000–$20,000</td></tr>
+          <tr><th scope="row">401–14,999</th><td>Firm plan. $1.10 after the 400 included.</td><td>1,000 invoices is $1,159</td></tr>
+          <tr><th scope="row">15,000+</th><td>$0.95–$1.00 on an annual contract</td><td>20,000 invoices is $19,000–$20,000</td></tr>
           </tbody>
         </table></div>
-        <p class="vol-note">Example monthly cost = price per invoice × example volume. Invoices that fail a check are never billed.</p>
+        <p class="vol-note">A backlog is quoted as a project, not forced onto this table. You pay only for invoices we deliver as accepted.</p>
       </div>
-      <p class="note reveal">"Accepted" means the invoice passed every check, or was fixed and confirmed by our reviewers. Monthly plans renew monthly; cancel any time.</p>
+      <p class="note reveal">"Accepted" means we delivered it: it passed every check, or it was fixed and confirmed. Monthly plans renew monthly; cancel any time.</p>
     </div>
   </section>
 
@@ -329,7 +326,7 @@
       <h2 class="reveal">See it on your own clients' invoices before you commit.</h2>
       <ol class="timeline">
         <li class="reveal"><span class="when">Day 1</span><h3>Kickoff</h3><p>A short call about your clients and software. You get a private intake address the same day.</p></li>
-        <li class="reveal"><span class="when">Days 1–30</span><h3>Send invoices</h3><p>Forward up to 200 invoices. Each batch comes back within one business day, checked and ready to import.</p></li>
+        <li class="reveal"><span class="when">Days 1–30</span><h3>Send invoices</h3><p>Forward up to 200 invoices. Each batch is targeted for one business day. Large batches are scheduled.</p></li>
         <li class="reveal"><span class="when">Day 30</span><h3>Results report</h3><p>Accuracy, exceptions found, turnaround and the time your team saved, side by side with your current process.</p></li>
         <li class="reveal"><span class="when">Then</span><h3>Your call</h3><p>Choose a monthly plan, or walk away and keep every file we returned.</p></li>
       </ol>
@@ -374,7 +371,7 @@
       <ul class="sec-list">
         <li class="reveal"><b>Encrypted in transit.</b> Uploads and deliveries travel over HTTPS.</li>
         <li class="reveal"><b>Used only for your work.</b> Documents are processed to produce your entries and are never used to train AI models.</li>
-        <li class="reveal"><b>Limited access.</b> Only the reviewers assigned to your account can see your documents.</li>
+        <li class="reveal"><b>Limited access.</b> Documents are visible to WorkUnit Labs for the purpose of producing your entries, and not to anyone else.</li>
         <li class="reveal"><b>Retention you agree to.</b> We set a deletion schedule with you before the first batch.</li>
         <li class="reveal"><b>You stay in control.</b> We prepare entries; your team posts them and approves payments.</li>
       </ul>
@@ -389,13 +386,13 @@
       <div class="faq">
         <details class="reveal"><summary>Is this just OCR?</summary><p>No. OCR turns an image into text. We return structured entries (vendor, dates, totals, tax and every line item) and check that the numbers reconcile before calling an invoice done.</p></details>
         <details class="reveal"><summary>What counts as an "accepted" invoice?</summary><p>One that passed every check, or that failed a check and was then fixed and confirmed by our reviewers. Invoices we can't confirm come back flagged with the reason and aren't billed.</p></details>
-        <details class="reveal"><summary>What happens when the AI gets something wrong?</summary><p>Our checks catch most errors before they reach you: totals that don't reconcile, missing fields, duplicates and implausible dates. Those invoices go to a reviewer. If an accepted invoice turns out to be wrong, tell us and we'll credit it.</p></details>
-        <details class="reveal"><summary>How fast is turnaround?</summary><p>Our target is within one business day. Large backlogs are delivered in stages: most invoices within 24–48 hours, reviewed exceptions after.</p></details>
+        <details class="reveal"><summary>What happens when the AI gets something wrong?</summary><p>Our checks catch most errors before they reach you: totals that don't reconcile, missing fields, duplicates and implausible dates. Those invoices are reviewed by WorkUnit Labs. If an accepted invoice turns out to be wrong, tell us and we'll credit it.</p></details>
+        <details class="reveal"><summary>How fast is turnaround?</summary><p>The target is one business day. It is a target, not a guarantee. Large backlogs are scheduled in stages.</p></details>
         <details class="reveal"><summary>What file types can we send?</summary><p>PDFs, scans and phone photos saved as JPG or PNG. Multi-page invoices are fine; anything that isn't an invoice, like a quote or statement, is flagged rather than entered.</p></details>
         <details class="reveal"><summary>Do my clients have to change anything?</summary><p>No. Keep collecting invoices the way you do now and forward them to the intake address, or drop them in a shared folder.</p></details>
         <details class="reveal"><summary>Which accounting software do you support?</summary><p>QuickBooks Online and Xero files today. Tell us what you use in the pilot form and we'll tell you how we'd deliver.</p></details>
         <details class="reveal"><summary>We have tens of thousands of invoices. Can you handle that?</summary><p>Yes. We start with a paid test of about 1,000 of your invoices so we can measure your documents, then quote a per-invoice price and a delivery schedule for the full job.</p></details>
-        <details class="reveal"><summary>How much does each invoice cost?</summary><p>Pilot is $99 one time for up to 200 invoices. Practice is $199/mo with 150 accepted invoices included ($1.33 each) and $1.25 per invoice after that. Firm is $499/mo with 400 included ($1.25 each) and $1.10 per invoice after that. Above Firm-plan volume, volume pricing runs from $1.40 down to $0.95–$1.00 per invoice (15,000+ a month on an annual contract); see the <a href="#volume">cost per invoice by monthly volume</a> table. Invoices that fail a check are never billed.</p></details>
+        <details class="reveal"><summary>How much does each invoice cost?</summary><p>Pilot is $99 one time for up to 200 invoices, after we qualify the firm. Practice is $199/mo with 150 accepted invoices included ($1.33 each) and $1.25 per invoice after that. Firm is $499/mo with 400 included ($1.25 each) and $1.10 per invoice after that. From 15,000 a month, an annual contract is $0.95–$1.00. See <a href="#volume">above the Firm plan</a>. You pay only for invoices we deliver as accepted.</p></details>
         <details class="reveal"><summary>Is there a contract or setup fee?</summary><p>No setup fee and no long-term contract. The pilot is a one-time $99; monthly plans renew monthly and you can cancel any time.</p></details>
         <details class="reveal"><summary>Do you post bills or make payments?</summary><p>No. We prepare clean entries; your team stays in control of posting and payments.</p></details>
         <details class="reveal"><summary>Can we sign a data-processing agreement?</summary><p>Yes, a DPA is available on request. Email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abc2c5cdc4ebdcc4d9c0dec5c2dfc7cac9d885c8c4c6">[email&#160;protected]</a> or mention it in the pilot form.</p></details>
@@ -450,113 +447,25 @@
   <section id="contact" class="section">
     <div class="wrap narrow">
       <p class="eyebrow reveal">About &amp; contact</p>
-      <h2 class="reveal">A small team. One platform.</h2>
-      <p class="lede reveal">WorkUnit Labs is the business name of Dovewood Capital, LLC, based in Fort Worth, Texas. Today we run invoice processing for bookkeeping and AP firms. The same system is how the next units get built. Questions, DPAs or security reviews: email <a href="/cdn-cgi/l/email-protection#731a1d151c33041c0118061d1a071f1211005d101c1e"><span class="__cf_email__" data-cfemail="5d34333b321d2a322f3628333429313c3f2e733e3230">[email&#160;protected]</span></a>.</p>
+      <h2 class="reveal">One company. Invoice work first.</h2>
+      <p class="lede reveal">WorkUnit Labs is the business name of Dovewood Capital, LLC, based in Fort Worth, Texas. We process invoices for bookkeeping and AP firms. Other units, when they exist, are listed on the <a href="/platform">platform</a> page. Questions, DPAs or security reviews: email <a href="/cdn-cgi/l/email-protection#731a1d151c33041c0118061d1a071f1211005d101c1e"><span class="__cf_email__" data-cfemail="5d34333b321d2a322f3628333429313c3f2e733e3230">[email&#160;protected]</span></a>.</p>
     </div>
   </section>
 
-  <!-- ===== THE PLATFORM ===== -->
   <section class="section alt" id="platform">
-    <div class="wrap">
-      <p class="eyebrow reveal">WorkUnit Labs</p>
-      <h2 class="reveal">Outsourced operations. Not another AI tool.</h2>
-      <p class="lede reveal">Companies need the work done. They do not need to hire engineers, keep models, or supervise a stack of agents. WorkUnit Labs takes a defined process, runs it on shared infrastructure, and returns completed work. You pay for what passes, not for seats, tokens, or hours.</p>
-      <div class="pains">
-        <div class="pain reveal"><span class="pain-n">01</span><h3>Input</h3><p>The documents, records, or events a unit receives. For invoices, that is a PDF, scan, or photo.</p></div>
-        <div class="pain reveal"><span class="pain-n">02</span><h3>Execution</h3><p>AI reads the work. Deterministic rules check it. The model does not get the last word.</p></div>
-        <div class="pain reveal"><span class="pain-n">03</span><h3>Validation</h3><p>A unit finishes only when the checks are true. Totals, duplicates, required fields, dates.</p></div>
-        <div class="pain reveal"><span class="pain-n">04</span><h3>Exception</h3><p>Anything that cannot be verified is flagged and reviewed. It is never guessed and never billed.</p></div>
-        <div class="pain reveal"><span class="pain-n">05</span><h3>Output</h3><p>A finished deliverable. For invoices, a file ready for QuickBooks Online or Xero.</p></div>
-        <div class="pain reveal"><span class="pain-n">06</span><h3>Measurement</h3><p>Accuracy, turnaround, and cost are counted on accepted work. That is the record.</p></div>
-      </div>
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">The platform</p>
+      <h2 class="reveal">Invoices are the work you can buy today.</h2>
+      <p class="lede reveal">AP Match, Cash Match, and CloseReady run only when you send the matching documents. Everything else on the map is not for sale yet. <a href="/platform">See the platform</a>.</p>
     </div>
   </section>
-
-  <section class="section" id="reccs">
-    <div class="wrap">
-      <p class="eyebrow reveal">Running with every invoice</p>
-      <h2 class="reveal">Three checks. One file in, one file out.</h2>
-      <p class="lede reveal">These run after the invoice is read. A gap is flagged and held. You pay only for a file that passes.</p>
-      <div class="recs">
-        <article class="unit rec live reveal"><span class="tag live">Live</span><h3>AP Match</h3><p>Match the invoice to the purchase order and the receiving record. Quantity and price gaps are flagged before anyone pays.</p></article>
-        <article class="unit rec live reveal"><span class="tag live">Live</span><h3>Cash Match</h3><p>Match payments to open invoices, read the remittance, and separate a short pay from cash that does not apply.</p></article>
-        <article class="unit rec live reveal"><span class="tag live">Live</span><h3>CloseReady</h3><p>Prepare the month-end file. Missing support, breaks, and exceptions are listed before the close, not after it.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="units">
-    <div class="wrap">
-      <p class="eyebrow reveal">The units</p>
-      <h2 class="reveal">One platform. A unit for each process.</h2>
-      <p class="lede reveal">Invoices, AP Match, Cash Match, and CloseReady are live. Everything else on this map uses the same intake, checks, exceptions, and delivery. None of it is a separate company, and none of it is offered until it can pass or flag the same way.</p>
-
-      <div class="unit-suite reveal">
-        <div class="unit-head"><b>WorkUnit Finance</b><span>Phase 1</span></div>
-        <div class="units">
-          <article class="unit live"><span class="tag live">Live</span><h3>Invoices</h3><p>Extract every field, math-check the totals, catch duplicates, and return an entry ready for QuickBooks Online or Xero.</p></article>
-          <article class="unit live"><span class="tag live">Live</span><h3>AP Match</h3><p>Match the invoice to the purchase order and the receiving record. Quantity and price gaps are flagged before payment.</p></article>
-          <article class="unit live"><span class="tag live">Live</span><h3>Cash Match</h3><p>Match incoming payments to invoices, read remittance advice, and separate short pays from cash that does not apply.</p></article>
-          <article class="unit"><span class="tag next">Next</span><h3>Expenses</h3><p>Read receipts, match them to card transactions, check policy, and catch a duplicate before the report is approved.</p></article>
-          <article class="unit live"><span class="tag live">Live</span><h3>CloseReady</h3><p>Gather the support for month-end. Missing records, breaks, and exceptions are listed before the close.</p></article>
-          <article class="unit"><span class="tag next">Next</span><h3>Vendor records</h3><p>Pull supplier details, check required fields, catch a duplicate vendor, and prepare a record the ERP can take.</p></article>
-        </div>
-      </div>
-
-      <div class="unit-suite reveal">
-        <div class="unit-head"><b>WorkUnit Data</b><span>Phase 2</span></div>
-        <div class="units">
-          <article class="unit"><span class="tag later">Later</span><h3>Record cleanup</h3><p>Normalize a spreadsheet, name the duplicates, and flag rows that fail the rules you already use.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Contract extraction</h3><p>Pull the dates, parties, amounts, and renewal terms. Incomplete clauses are flagged, not filled in.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Dataset validation</h3><p>Check a file against a schema. Bad types, missing keys, and conflicting rows come back as a list.</p></article>
-        </div>
-      </div>
-
-      <div class="unit-suite reveal">
-        <div class="unit-head"><b>WorkUnit Customer</b><span>Phase 2</span></div>
-        <div class="units">
-          <article class="unit"><span class="tag later">Later</span><h3>Ticket intake</h3><p>Classify each incoming request, set a priority, and route it. Unresolved cases are escalated, not closed.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Reply draft</h3><p>Draft the response from the case and the policy. A person sends it. The unit does not.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Resolution check</h3><p>Confirm the case has the fields a resolved ticket requires, and send back the ones that do not.</p></article>
-        </div>
-      </div>
-
-      <div class="unit-suite reveal">
-        <div class="unit-head"><b>WorkUnit Business</b><span>Phase 2</span></div>
-        <div class="units">
-          <article class="unit"><span class="tag later">Later</span><h3>Purchase orders</h3><p>Compare the order, the invoice, and the delivery. Mismatches are listed before anyone pays.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>CRM maintenance</h3><p>Clean account records, fill only what a source supports, and write a short summary of what changed.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>HR records</h3><p>Check onboarding documents for completeness and keep the employee record to the fields you approved.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Claims intake</h3><p>Extract a claim file, confirm the required documents, and flag an inconsistency instead of deciding it.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Shipments</h3><p>Read delivery documents, reconcile them to the order, and list the exceptions.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Returns</h3><p>Classify a refund request against the order and the policy, and hold anything the documents do not support.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Audit packages</h3><p>Collect the evidence, check that each item is present, and assemble the package. Gaps stay visible.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Lead check</h3><p>Validate a lead against the fields sales already requires, and drop duplicates before they enter the CRM.</p></article>
-        </div>
-      </div>
-
-      <div class="unit-suite reveal">
-        <div class="unit-head"><b>WorkUnit Enterprise</b><span>Phase 3</span></div>
-        <div class="units">
-          <article class="unit"><span class="tag later">Later</span><h3>Multi-department runs</h3><p>One intake, several units, one report of what finished and what was sent back.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Document processing</h3><p>High-volume extraction across the document types you name, with the same pass-or-flag rule.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Agent supervision</h3><p>Watch the units that are running, score them against the checks, and stop a run that drifts.</p></article>
-          <article class="unit"><span class="tag later">Later</span><h3>Custom units</h3><p>A process you define: the input, the checks, the exception path, and the file you get back.</p></article>
-        </div>
-      </div>
-
-      <p class="lede reveal">You pay for accepted work. Not for seats, tokens, or hours. An invoice that fails a check is the model. Later units will be priced the same way, once each one can prove the same thing.</p>
-    </div>
-  </section>
-
-</main>
 
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
   <div class="wrap footer-inner">
-    <img src="assets/logo-dark.png" alt="WorkUnit Labs" width="600" height="113">
+    <img src="/assets/logo-dark.png" alt="WorkUnit Labs" width="600" height="113">
     <nav class="footer-links" aria-label="Footer">
-      <a href="#how">How it works</a><a href="#deliver">What you get</a><a href="#quality">Quality</a><a href="#pricing">Pricing</a><a href="#reccs">Checks</a><a href="#units">Units</a><a href="#faq">FAQ</a><a href="/requirements">Invoice requirements</a><a href="https://portal.workunitlabs.com/">Client login</a><a href="https://portal.workunitlabs.com/#upload">Upload invoices</a><a href="https://portal.workunitlabs.com/start-pilot">Start Pilot</a>
+      <a href="#how">How it works</a><a href="#deliver">What you get</a><a href="#quality">Quality</a><a href="#pricing">Pricing</a><a href="/platform">Platform</a><a href="#faq">FAQ</a><a href="/requirements">Invoice requirements</a><a href="https://portal.workunitlabs.com/">Client login</a><a href="https://portal.workunitlabs.com/#upload">Upload invoices</a><a href="/#pilot">Start Pilot</a>
     </nav>
     <nav class="footer-links" aria-label="Legal">
       <a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/security">Security</a><a href="/dpa">DPA</a><a href="#contact">Contact</a>
@@ -565,9 +474,9 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js" } }</script>
-<script src="main.js" defer></script>
-<script type="module" src="hero3d.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="importmap">{ "imports": { "three": "/vendor/three/three.module.min.js" } }</script>
+<script src="/main.js" defer></script>
+<script type="module" src="/hero3d.js"></script>
 <script src="/nav.js" defer></script>
 </body>
 </html>

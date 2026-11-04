@@ -8,9 +8,6 @@
 <link rel="canonical" href="https://workunitlabs.com/requirements">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -28,24 +25,25 @@
     </nav>
     <div class="nav-actions">
       <a class="nav-login" href="https://portal.workunitlabs.com/">Client login</a>
-      <a class="btn btn-primary nav-start" href="https://portal.workunitlabs.com/start-pilot">Start Pilot</a>
+      <a class="btn btn-primary nav-start" href="/#pilot">Start Pilot</a>
       <button class="nav-toggle" type="button" aria-controls="site-menu" aria-expanded="false" aria-label="Open menu"><span></span></button>
     </div>
   </div>
 </header>
 <main class="legal">
 <h1>Invoice field requirements</h1>
-<p>Every invoice is read and then checked against the rules below. An invoice is <b>accepted</b> only when every required field is present and every check passes. Anything else goes to a human reviewer, and invoices that fail a check are never billed.</p>
-<h2>Required fields</h2><p>If one is missing or unreadable, the invoice is flagged <code>REQUIRED_MISSING</code> with the field's name and sent to review.</p><ul><li>Vendor name</li><li>Invoice number</li><li>Invoice date (a valid calendar date)</li><li>Due date <em>or</em> payment terms</li><li>Currency</li><li>Subtotal</li><li>Tax (0 is fine if the invoice states it)</li><li>Total</li><li>At least one line item with an amount</li></ul>
-<h2>Optional fields</h2><p>We capture these when they're on the invoice and show you when they're absent, but they never block acceptance.</p><ul><li>Vendor address</li><li>Vendor tax ID</li><li>PO number</li><li>Bill-to</li><li>Payment terms</li><li>Line quantity and unit price</li><li>Item codes</li><li>GL / account coding</li><li>Shipping</li><li>Discounts</li><li>Notes</li></ul>
+<p>Every invoice is read and then checked against the rules below. An invoice is <b>accepted</b> when every required field is present and every check passes, or when a failed check is fixed and confirmed. Anything else is flagged. You pay only for invoices we deliver as accepted.</p>
+<h2>Required fields</h2><p>If one is missing or unreadable, the invoice is flagged <code>REQUIRED_MISSING</code> with the field's name and sent to review.</p><ul><li>Vendor name</li><li>Invoice number</li><li>Invoice date (a valid calendar date)</li><li>Currency</li><li>Subtotal</li><li>Tax, including a stated zero</li><li>Total</li><li>At least one line item with an amount</li></ul>
+<h2>Optional fields</h2><p>We capture these when they're on the invoice and show you when they're absent, but they never block acceptance.</p><ul><li>Due date or payment terms</li><li>Vendor address</li><li>Vendor tax ID</li><li>PO number</li><li>Bill-to</li><li>Line quantity and unit price</li><li>Item codes</li><li>GL / account coding</li><li>Shipping</li><li>Discounts</li><li>Notes</li></ul>
 <h2>Other checks on every invoice</h2><ul>
-<li><b>Math:</b> line amounts, subtotal, tax and total must add up to the cent.</li>
-<li><b>Currency:</b> every amount must be in the invoice's currency, and the currency must match the vendor's usual currency (USD by default).</li>
-<li><b>Tax rate:</b> tax must match the vendor's expected rate (8.25% Texas default, ±0.05 percentage points) unless your reviewer has set a different rate for that vendor.</li>
-<li><b>Duplicates:</b> checked against your full history, both for the same vendor and invoice number and for the same vendor and total within 7 days.</li>
-<li><b>Dates:</b> they must be real calendar dates, and stale or future-dated invoices are flagged.</li></ul>
+<li><b>Math:</b> line amounts, subtotal, tax and total must add up to the cent. If quantity and unit price are both present, quantity times unit price must equal the line amount.</li>
+<li><b>Currency:</b> amounts are read in the invoice's currency. A mismatch is flagged only after a vendor profile has been saved. There is no assumption that every vendor bills in USD.</li>
+<li><b>Tax rate:</b> a stated tax, including zero, is accepted. Once a vendor profile has a rate, later invoices from that vendor are checked against it, within the tolerance on the profile (0.05 percentage points unless changed). We do not apply an 8.25% Texas default to vendors that have no profile.</li>
+<li><b>Duplicates:</b> checked against your history, both for the same vendor and invoice number and for the same vendor and total within 7 days.</li>
+<li><b>Dates:</b> invoice dates must be real calendar dates. Stale or future-dated invoices are flagged. A missing due date is not a failure.</li>
+<li><b>Add-ons:</b> AP Match, Cash Match, and CloseReady run only when you send the purchase order and receipt, the payment, or the close file. A missing add-on document is not a failed invoice.</li></ul>
 <p>Your WorkUnit Labs reviewer can change which fields are required for your account. Signed-in clients can see the current list under <a href="https://portal.workunitlabs.com/">Client login</a> → Invoice requirements.</p>
-<p><a class="btn btn-primary" href="https://portal.workunitlabs.com/start-pilot">Start Pilot · $99</a></p>
+<p><a class="btn btn-primary" href="/#pilot">Request a pilot</a></p>
 </main>
 <footer class="footer">
   <div class="wrap footer-inner">

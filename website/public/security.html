@@ -9,9 +9,6 @@
 <link rel="canonical" href="https://workunitlabs.com/security">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -28,8 +25,8 @@
     <p class="updated">Last updated November 2, 2026</p>
 
 <p>Invoices are financial data, and Dovewood Capital, LLC, a Texas limited liability company doing business as WorkUnit Labs (“WorkUnit Labs,” “we,” “us”) handles them that way.</p>
-<h2>Our practices</h2><ul><li><b>Encryption in transit.</b> Uploads, deliveries and this website use HTTPS.</li><li><b>Used only for your work.</b> Documents are processed only to produce your entries and are never used to train AI models.</li><li><b>Limited access.</b> Only the people working on your account can see your documents.</li><li><b>Retention you set.</b> We agree a deletion schedule with you before the first batch, and delete data on request.</li><li><b>You stay in control.</b> We never post entries or approve payments.</li></ul>
-<h2>Subprocessors</h2><ul><li><b>Cloudflare</b> – website hosting, content delivery and storage of form submissions.</li><li><b>An AI model provider</b> – extraction of invoice fields, under terms that do not permit training on your data.</li><li><b>Stripe</b> (if used) – payment processing. We do not store full card numbers.</li></ul><p>We will tell clients before adding a new subprocessor that handles client documents.</p>
+<h2>Our practices</h2><ul><li><b>Encryption in transit and at rest.</b> Uploads, deliveries and this website use HTTPS. Stored files are encrypted at rest by Cloudflare.</li><li><b>Used only for your work.</b> Documents are processed only to produce your entries and are never used to train AI models.</li><li><b>Limited access.</b> Documents are visible to WorkUnit Labs for the purpose of producing your entries.</li><li><b>Retention you set.</b> We agree a deletion schedule with you before the first batch, and delete data on request.</li><li><b>You stay in control.</b> We never post entries or approve payments.</li></ul>
+<h2>Subprocessors</h2><ul><li><b>Cloudflare</b> – website hosting, content delivery, and storage. Stored data is encrypted at rest.</li><li><b>xAI</b> – extraction of invoice fields. Your documents are not used to train models.</li><li><b>Stripe</b> – payment processing. We do not store full card numbers.</li></ul><p>We will give at least 30 days' notice before a new subprocessor handles client documents.</p>
 <h2>Incidents</h2><p>If we learn of a security incident affecting your data, we will notify affected clients without undue delay, explain what happened and what we're doing about it.</p>
 <h2>Reporting a vulnerability</h2><p>Email <a href="/cdn-cgi/l/email-protection#0f666169604f78607d647a61667b636e6d7c216c6062"><span class="__cf_email__" data-cfemail="4a23242c250a3d2538213f24233e262b283964292527">[email&#160;protected]</span></a>. Please give us reasonable time to fix an issue before disclosing it.</p>
 <h2>Security reviews</h2><p>Need a questionnaire completed or a <a href="/dpa">DPA</a> signed? Email <a href="/cdn-cgi/l/email-protection#523b3c343d12253d2039273c3b263e3330217c313d3f"><span class="__cf_email__" data-cfemail="61080f070e21160e130a140f08150d0003124f020e0c">[email&#160;protected]</span></a>.</p>

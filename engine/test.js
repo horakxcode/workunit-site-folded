@@ -35,7 +35,15 @@ const payments = [{ vendorName: "Harbor Linen Service", invoiceNumber: "HL-30176
 const closeSupport = [{ name: "bank rec", present: true }];
 
 function codesOf(extraction, extra = {}) {
-  return checkInvoice({ extraction, purchaseOrders: [po], receipts, payments, closeSupport, ...extra }).codes;
+  return checkInvoice({
+    extraction,
+    vendorProfile: extra.vendorProfile === undefined ? { currency: "USD", taxRatePct: 8.25, tolerancePt: 0.05 } : extra.vendorProfile,
+    purchaseOrders: [po],
+    receipts,
+    payments,
+    closeSupport,
+    ...extra,
+  }).codes;
 }
 
 const pass = codesOf(invoice());
@@ -59,10 +67,11 @@ assert.ok(codesOf(invoice(), { receipts: [{ poNumber: "PO-100", lines: [{ sku: "
 assert.ok(codesOf(invoice({ lineItems: [{ sku: "BIB", description: "Patient bibs", quantity: 1, unitPrice: 21, amount: 21 }], subtotal: 21, tax: 1.73, total: 22.73 })).includes("PRICE_MISMATCH"));
 assert.ok(codesOf(invoice({ lineItems: [{ sku: "BIB", quantity: 1, unitPrice: 20, amount: 20 }], subtotal: 20, tax: 1.65, total: 21.65 }), { acceptedQty: { bib: 10 } }).includes("ALREADY_INVOICED"));
 
-assert.ok(codesOf(invoice(), { payments: [] }).includes("CASH_UNAPPLIED"));
+assert.ok(codesOf(invoice(), { payments: [{ vendorName: "Other Co", invoiceNumber: "X", amount: 1 }] }).includes("CASH_UNAPPLIED"));
 assert.ok(codesOf(invoice(), { payments: [{ vendorName: "Harbor Linen Service", invoiceNumber: "HL-30176", amount: 100 }] }).includes("CASH_SHORT"));
 assert.ok(codesOf(invoice(), { closeSupport: [{ name: "bank rec", present: false }] }).includes("CLOSE_MISSING"));
-assert.ok(codesOf(invoice(), { closeSupport: [] }).includes("CLOSE_MISSING"));
+assert.ok(codesOf(invoice(), { closeSupport: [] }).includes("CLOSE_MISSING") === false);
+assert.deepEqual(checkInvoice({ extraction: invoice() }).codes.filter((code) => code.startsWith("PO_") || code.startsWith("CASH_") || code.startsWith("CLOSE_")), []);
 
 const untouched = invoice();
 checkInvoice({ extraction: untouched, purchaseOrders: [po], receipts, payments, closeSupport });

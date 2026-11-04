@@ -49,7 +49,8 @@ const onScroll = () => {
 window.addEventListener("scroll", onScroll, { passive: true });
 onScroll();
 
-document.getElementById("year").textContent = new Date().getFullYear();
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // Savings calculator. Keep these prices in sync with the pricing section in index.html.
 const PLANS = [
@@ -59,6 +60,7 @@ const PLANS = [
 const money = (n) => "$" + Math.round(n).toLocaleString("en-US");
 const calcInputs = ["volume", "minutes", "rate"].map((id) => document.getElementById(`i-${id}`));
 function updateCalc() {
+  if (calcInputs.some((el) => !el)) return;
   const [volume, minutes, rate] = calcInputs.map((el) => Number(el.value));
   const current = volume * (minutes / 60) * rate;
   const best = PLANS.map((p) => ({ ...p, cost: p.base + Math.max(0, volume - p.included) * p.overage }))
@@ -76,12 +78,13 @@ function updateCalc() {
   document.getElementById("r-hours").textContent = Math.round(volume * minutes / 60).toLocaleString("en-US");
   document.getElementById("r-per").textContent = "$" + (best.cost / volume).toFixed(2);
 }
-calcInputs.forEach((el) => el.addEventListener("input", updateCalc));
-updateCalc();
+calcInputs.forEach((el) => el && el.addEventListener("input", updateCalc));
+if (calcInputs.every(Boolean)) updateCalc();
 
 // Pilot form: posts to /api/pilot (functions/api/pilot.js), which saves the request
 const form = document.getElementById("pilot-form");
 const msg = document.getElementById("form-msg");
+if (form && msg) {
 const show = (text, kind) => { msg.textContent = text; msg.className = `form-msg ${kind}`; };
 
 form.addEventListener("submit", async (e) => {
@@ -112,3 +115,4 @@ form.addEventListener("submit", async (e) => {
     button.textContent = "Request a pilot spot";
   }
 });
+}

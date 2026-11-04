@@ -424,12 +424,12 @@ async function settingsOf(env, clientId) {
 }
 
 function defaultSettings() {
-  const required = new Set(["vendorName", "invoiceNumber", "invoiceDate", "dueDate", "currency", "subtotal", "tax", "total", "lineItems"]);
+  const required = new Set(["vendorName", "invoiceNumber", "invoiceDate", "currency", "subtotal", "tax", "total", "lineItems"]);
   const fields = [
     ["vendorName", "Vendor name", true],
     ["invoiceNumber", "Invoice number", true],
     ["invoiceDate", "Invoice date", true],
-    ["dueDate", "Due date or payment terms", true],
+    ["dueDate", "Due date or payment terms", false],
     ["currency", "Currency", true],
     ["subtotal", "Subtotal", true],
     ["tax", "Tax", true],
@@ -482,7 +482,8 @@ async function vendorProfile(env, clientId, vendorName, settings) {
   const key = String(vendorName || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
   const vendors = await vendorsOf(env, clientId);
   const found = vendors.find((vendor) => vendor.vendor_key === key);
-  return { currency: found?.currency || settings.defaultCurrency, taxRatePct: found?.tax_rate_pct ?? settings.defaultTaxRatePct, tolerancePt: found?.tolerance_pt ?? settings.tolerancePt };
+  if (!found) return null;
+  return { currency: found.currency || settings.defaultCurrency, taxRatePct: found.tax_rate_pct ?? settings.defaultTaxRatePct, tolerancePt: found.tolerance_pt ?? settings.tolerancePt };
 }
 
 async function rulesOf(env, clientId) {
