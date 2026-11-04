@@ -93,29 +93,6 @@ function init() {
   });
   if (blocks.instanceColor) blocks.instanceColor.needsUpdate = true;
 
-  const driftMat = new THREE.MeshPhysicalMaterial({
-    color: 0xd5e6f5,
-    roughness: 0.18,
-    metalness: 0,
-    transmission: 0.92,
-    thickness: 0.3,
-    ior: 1.45,
-    clearcoat: 1,
-    clearcoatRoughness: 0.08,
-    transparent: true,
-    envMapIntensity: 1.2,
-  });
-  const drifters = [];
-  for (let i = 0; i < 12; i++) {
-    const mesh = new THREE.Mesh(geo, driftMat);
-    mesh.position.set((Math.random() - 0.5) * 16, Math.random() * 6 + 1, (Math.random() - 0.5) * 6);
-    mesh.scale.setScalar(0.35 + Math.random() * 0.25);
-    mesh.userData.base = mesh.position.clone();
-    mesh.userData.phase = Math.random() * Math.PI * 2;
-    scene.add(mesh);
-    drifters.push(mesh);
-  }
-
   function makeLabel(parts) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -330,13 +307,6 @@ function init() {
       placeHold();
     }
     fitZ = 9.4;
-
-    drifters.forEach((mesh) => {
-      const base = mesh.userData.base;
-      mesh.position.y = base.y + Math.sin(now * 0.001 + mesh.userData.phase) * 0.35;
-      mesh.rotation.x = now * 0.0003 + mesh.userData.phase;
-      mesh.rotation.y = now * 0.0004;
-    });
 
     camera.position.x = cam.x + Math.sin(seconds * 0.22) * 0.12 + smoothX * 0.35;
     camera.position.y = cam.y + Math.cos(seconds * 0.18) * 0.12 + smoothY * -0.2;

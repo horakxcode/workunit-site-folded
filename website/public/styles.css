@@ -62,7 +62,7 @@ h3 { font-size: 18px; font-weight: 700; }
 /* ---------- hero ---------- */
 .hero { position: relative; padding: 72px 0 88px; overflow: hidden; }
 .hero-copy { position: relative; z-index: 2; }
-.hero-bg { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #F7FAFF 0%, var(--white) 100%); }
+.hero-bg { position: absolute; inset: 0; z-index: -1; background: var(--white); }
 .orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; }
 .orb-a { width: 520px; height: 520px; right: -120px; top: -140px; background: radial-gradient(circle, #BFE6FF, transparent 70%); animation: drift 18s ease-in-out infinite alternate; }
 .orb-b { width: 420px; height: 420px; left: -160px; bottom: -180px; background: radial-gradient(circle, #D6E4FF, transparent 70%); animation: drift 22s ease-in-out infinite alternate-reverse; }
