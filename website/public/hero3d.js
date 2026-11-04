@@ -1,4 +1,4 @@
-// W U L built from cubes, on the white page.
+// The my.workunitlabs.com cube scene: WUL on a dark field.
 import * as THREE from "three";
 
 const canvas = document.getElementById("hero-canvas");
@@ -29,9 +29,11 @@ function init() {
   renderer.toneMappingExposure = 1.25;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setClearColor(0xffffff, 0);
+  renderer.setClearColor(0x071422, 1);
 
   const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x071422);
+  scene.fog = new THREE.Fog(0x071422, 16, 38);
 
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
   camera.position.set(2.6, 3.4, 14.5);
@@ -50,7 +52,20 @@ function init() {
   fill.position.set(-6, 2.5, -4);
   scene.add(fill);
 
-  const COLORS = { navy: 0x0b2d4b, blue: 0x1e7bff, cyan: 0x1e7bff };
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(20, 8),
+    new THREE.ShadowMaterial({ opacity: 0.35 })
+  );
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.05;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  const grid = new THREE.GridHelper(30, 30, 0x102030, 0x0a1828);
+  grid.position.y = -0.02;
+  scene.add(grid);
+
+  const COLORS = { navy: 0xbbd8ea, blue: 0x0e73c0, cyan: 0x148a95 };
   const pitch = 0.55;
   const slot = (x, y, z = 0) => new THREE.Vector3((x - 2.2) * pitch, y * pitch, z * pitch);
   const layout = [];
@@ -67,8 +82,8 @@ function init() {
     roughness: 0.48,
     metalness: 0.06,
     color: 0xffffff,
-    emissive: 0x000000,
-    emissiveIntensity: 0,
+    emissive: 0x120818,
+    emissiveIntensity: 0.15,
   });
   const blocks = new THREE.InstancedMesh(geo, mat, layout.length);
   blocks.castShadow = true;
@@ -82,14 +97,9 @@ function init() {
   });
   if (blocks.instanceColor) blocks.instanceColor.needsUpdate = true;
 
-  const driftMat = new THREE.MeshStandardMaterial({
-    roughness: 0.48,
-    metalness: 0.06,
-    color: 0xa9bccb,
-  });
   const drifters = [];
   for (let i = 0; i < 12; i++) {
-    const mesh = new THREE.Mesh(geo, driftMat);
+    const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set((Math.random() - 0.5) * 16, Math.random() * 6 + 1, (Math.random() - 0.5) * 6);
     mesh.scale.setScalar(0.35 + Math.random() * 0.25);
     mesh.userData.base = mesh.position.clone();
