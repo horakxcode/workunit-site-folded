@@ -224,32 +224,6 @@ select { -webkit-appearance: none; appearance: none; padding-right: 38px; cursor
   .form { padding: 22px; }
 }
 
-/* ---------- scroll story ---------- */
-.story { position: relative; height: 900vh; background: #07080c; }
-.story-splash { position: fixed; inset: 0; z-index: 80; display: grid; place-content: center; justify-items: center; background: #07080c; color: #fff; transition: opacity .6s ease; }
-.story-splash.hide { opacity: 0; pointer-events: none; }
-.story-splash p { margin: 0 0 8px; letter-spacing: .42em; font-size: 13px; font-weight: 500; }
-.story-splash b { font-size: 92px; font-weight: 300; letter-spacing: -0.04em; line-height: 1; }
-.story-stage { position: sticky; top: 72px; height: calc(100vh - 72px); overflow: hidden; background: #07080c; color: #fff; }
-.story-chapters { position: absolute; inset: 0; }
-.story-chapter { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; padding: 8vh 24px 12vh; }
-.story-chapter img { position: absolute; inset: 8% 12%; width: 76%; height: 84%; object-fit: contain; opacity: .28; filter: grayscale(1) contrast(1.15); pointer-events: none; }
-.story-copy { position: relative; z-index: 1; max-width: 640px; text-align: center; }
-.story-copy em { display: block; font-style: normal; letter-spacing: .28em; font-size: 12px; font-weight: 600; color: #9eb6ff; margin-bottom: 18px; }
-.story-copy h2 { color: #fff; font-weight: 400; font-size: clamp(36px, 5vw, 68px); letter-spacing: -0.03em; line-height: 1.05; }
-.story-copy p { margin: 22px auto 0; max-width: 460px; color: rgba(255,255,255,.78); font-size: 17px; line-height: 1.55; }
-.story-copy a { display: inline-flex; margin-top: 28px; color: #07080c; background: #fff; text-decoration: none; font-weight: 600; padding: 12px 22px; border-radius: 999px; }
-.story-scroll { position: absolute; left: 50%; bottom: 28px; width: 24px; height: 38px; margin-left: -12px; border: 1px solid rgba(255,255,255,.7); border-radius: 12px; }
-.story-scroll span { position: absolute; left: 50%; top: 8px; width: 3px; height: 8px; margin-left: -1.5px; background: #fff; border-radius: 2px; animation: story-wheel 1.6s ease-in-out infinite; }
-@keyframes story-wheel { 0% { transform: translateY(0); opacity: 1; } 80% { transform: translateY(12px); opacity: 0; } 100% { opacity: 0; } }
-@media (max-width: 720px) {
-  .story { height: 800vh; }
-  .story-stage { top: 64px; height: calc(100vh - 64px); }
-  .story-splash b { font-size: 64px; }
-  .story-chapter img { inset: 12% 4%; width: 92%; }
-}
-
-
 /* ---------- hero trust row ---------- */
 .trust { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; }
 .trust li { font-size: 14px; color: var(--muted); padding-left: 22px; position: relative; }
