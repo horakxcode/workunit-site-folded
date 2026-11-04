@@ -279,34 +279,8 @@ function init() {
     smoothX += (pointerX - smoothX) * 0.06;
     smoothY += (pointerY - smoothY) * 0.06;
     const cam = cameraAt(seconds);
-    const next = (form + 1) % forms.length;
-    let morph = 0;
-    if (phase === "morph") {
-      morph = Math.min(1, phaseElapsed / 5600);
-      placeMorph(morph);
-      if (morph >= 1) {
-        form = next;
-        phase = "hold";
-        phaseElapsed = 0;
-        morph = 0;
-      }
-    } else {
-      placeHold();
-      if (!reduceMotion && phaseElapsed > 5200) {
-        phase = "morph";
-        phaseElapsed = 0;
-      }
-    }
-    const e = smooth(morph);
-    fitZ = spans[form] + (spans[next] - spans[form]) * e;
-    const wordEls = [null, document.getElementById("word-name"), document.getElementById("word-line")];
-    wordEls.forEach((el, i) => {
-      if (!el) return;
-      const opacity = phase === "hold"
-        ? (form === i ? 1 : 0)
-        : (form === i ? 1 - e : next === i ? e : 0);
-      el.style.opacity = String(opacity);
-    });
+    placeHold();
+    fitZ = 9.4;
 
     drifters.forEach((mesh) => {
       const base = mesh.userData.base;
@@ -320,12 +294,9 @@ function init() {
     const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
     const aspect = camera.userData.aspect || camera.aspect || 1;
     camera.position.z = (fitZ / 2) / (half * aspect);
-    const spin = form === 0 ? 1 - e : next === 0 ? e : 0;
-    blocks.rotation.y = (cam.ry + smoothX * 0.18) * spin;
-    blocks.rotation.x = (-0.08 + smoothY * 0.06) * spin;
-    const lookFrom = lookY[form] + (form === 0 ? smoothY * -0.25 : 0);
-    const lookTo = lookY[next] + (next === 0 ? smoothY * -0.25 : 0);
-    camera.lookAt(cam.lx + smoothX * 0.5, lookFrom + (lookTo - lookFrom) * e, 0);
+    blocks.rotation.y = cam.ry + smoothX * 0.18;
+    blocks.rotation.x = -0.08 + smoothY * 0.06;
+    camera.lookAt(cam.lx + smoothX * 0.5, cam.ly + smoothY * -0.25, 0);
     renderer.render(scene, camera);
   }
 
