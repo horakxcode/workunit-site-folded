@@ -26,7 +26,7 @@ function init() {
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMapping = THREE.NoToneMapping;
   renderer.toneMappingExposure = 1;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -63,15 +63,7 @@ function init() {
   }));
 
   const geo = new THREE.BoxGeometry(0.22, 0.22, 0.22);
-  const mat = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
-    roughness: 0.42,
-    metalness: 0,
-    transmission: 0,
-    clearcoat: 0.35,
-    clearcoatRoughness: 0.25,
-    envMapIntensity: 0.35,
-  });
+  const mat = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const blocks = new THREE.InstancedMesh(geo, mat, layout.length);
   blocks.castShadow = false;
   blocks.receiveShadow = false;
