@@ -198,6 +198,7 @@ function init() {
       const cell = list[i];
       if (cell) {
         tmp.copy(cell.p);
+        tmp.y += lifts[i] || 0;
         dummy.scale.setScalar(fit);
         color.setHex(cell.c);
       } else {
@@ -276,6 +277,10 @@ function init() {
   let fitZ = 9.4;
   let phase = "hold";
   let phaseElapsed = 0;
+  const lifts = new Float32Array(count);
+  const trail = [];
+  const cursor = { x: 0, y: 0 };
+  const projected = new THREE.Vector3();
   let pointerX = 0, pointerY = 0, smoothX = 0, smoothY = 0, scrollY = 0;
   let running = true;
   let raf = 0;
@@ -303,8 +308,6 @@ function init() {
       const p = Math.min(1, phaseElapsed / (forms[0].length * brickMs));
       placeBuild(p);
       if (p >= 1) built = true;
-    } else {
-      placeHold();
     }
     fitZ = 9.4;
 
@@ -316,6 +319,27 @@ function init() {
     blocks.rotation.y = cam.ry + smoothX * 0.18;
     blocks.rotation.x = -0.08 + smoothY * 0.06;
     camera.lookAt(cam.lx + smoothX * 0.5, cam.ly + smoothY * -0.25, 0);
+    if (built) {
+      for (let t = trail.length - 1; t >= 0; t--) {
+        trail[t].life *= 0.92;
+        if (trail[t].life < 0.05) trail.splice(t, 1);
+      }
+      blocks.updateMatrixWorld();
+      camera.updateMatrixWorld();
+      const list = forms[0];
+      for (let i = 0; i < list.length; i++) {
+        projected.copy(list[i].p).applyMatrix4(blocks.matrixWorld).project(camera);
+        let influence = 0;
+        for (let t = 0; t < trail.length; t++) {
+          const dx = projected.x - trail[t].x;
+          const dy = projected.y - trail[t].y;
+          const near = Math.max(0, 1 - Math.hypot(dx, dy) / 0.14);
+          influence = Math.max(influence, near * near * trail[t].life);
+        }
+        lifts[i] += (influence * 0.9 - lifts[i]) * 0.2;
+      }
+      placeHold();
+    }
     renderer.render(scene, camera);
   }
 
@@ -329,6 +353,15 @@ function init() {
   window.addEventListener("pointermove", (event) => {
     pointerX = (event.clientX / window.innerWidth) * 2 - 1;
     pointerY = (event.clientY / window.innerHeight) * 2 - 1;
+    const rect = canvas.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
+    cursor.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    cursor.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    const last = trail[trail.length - 1];
+    if (!last || Math.hypot(cursor.x - last.x, cursor.y - last.y) > 0.012) {
+      trail.push({ x: cursor.x, y: cursor.y, life: 1 });
+      if (trail.length > 36) trail.shift();
+    }
   }, { passive: true });
   window.addEventListener("resize", resize);
 
