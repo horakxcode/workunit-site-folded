@@ -281,6 +281,18 @@ function init() {
   const trail = [];
   const cursor = { x: 0, y: 0 };
   const projected = new THREE.Vector3();
+  const CAT = { n: "#6fbf73", g: "#7e57c2", a: "#ef5350", e: "#ffb74d", t: "#f0d060", p: "#81c784", m: "#26a69a", h: "#9ccc65", l: "#4dd0e1", c: "#80cbc4" };
+  const ELEMENTS = "1 H Hydrogen n|2 He Helium g|3 Li Lithium a|4 Be Beryllium e|5 B Boron m|6 C Carbon n|7 N Nitrogen n|8 O Oxygen n|9 F Fluorine h|10 Ne Neon g|11 Na Sodium a|12 Mg Magnesium e|13 Al Aluminum p|14 Si Silicon m|15 P Phosphorus n|16 S Sulfur n|17 Cl Chlorine h|18 Ar Argon g|19 K Potassium a|20 Ca Calcium e|21 Sc Scandium t|22 Ti Titanium t|23 V Vanadium t|24 Cr Chromium t|25 Mn Manganese t|26 Fe Iron t|27 Co Cobalt t|28 Ni Nickel t|29 Cu Copper t|30 Zn Zinc t|31 Ga Gallium p|32 Ge Germanium m|33 As Arsenic m|34 Se Selenium n|35 Br Bromine h|36 Kr Krypton g|37 Rb Rubidium a|38 Sr Strontium e|39 Y Yttrium t|40 Zr Zirconium t|41 Nb Niobium t|42 Mo Molybdenum t|43 Tc Technetium t|44 Ru Ruthenium t|45 Rh Rhodium t|46 Pd Palladium t|47 Ag Silver t|48 Cd Cadmium t|49 In Indium p|50 Sn Tin p|51 Sb Antimony m|52 Te Tellurium m|53 I Iodine h|54 Xe Xenon g|55 Cs Cesium a|56 Ba Barium e|57 La Lanthanum l|58 Ce Cerium l|59 Pr Praseodymium l|60 Nd Neodymium l|61 Pm Promethium l|62 Sm Samarium l|63 Eu Europium l|64 Gd Gadolinium l|65 Tb Terbium l|66 Dy Dysprosium l|67 Ho Holmium l|68 Er Erbium l|69 Tm Thulium l|70 Yb Ytterbium l|71 Lu Lutetium l|72 Hf Hafnium t|73 Ta Tantalum t|74 W Tungsten t|75 Re Rhenium t|76 Os Osmium t|77 Ir Iridium t|78 Pt Platinum t|79 Au Gold t|80 Hg Mercury t|81 Tl Thallium p|82 Pb Lead p|83 Bi Bismuth p|84 Po Polonium p|85 At Astatine h|86 Rn Radon g|87 Fr Francium a|88 Ra Radium e|89 Ac Actinium c|90 Th Thorium c|91 Pa Protactinium c|92 U Uranium c|93 Np Neptunium c|94 Pu Plutonium c|95 Am Americium c|96 Cm Curium c|97 Bk Berkelium c|98 Cf Californium c|99 Es Einsteinium c|100 Fm Fermium c|101 Md Mendelevium c|102 No Nobelium c|103 Lr Lawrencium c|104 Rf Rutherfordium t|105 Db Dubnium t|106 Sg Seaborgium t|107 Bh Bohrium t|108 Hs Hassium t|109 Mt Meitnerium t|110 Ds Darmstadtium t|111 Rg Roentgenium t|112 Cn Copernicium t|113 Nh Nihonium p|114 Fl Flerovium p|115 Mc Moscovium p|116 Lv Livermorium p|117 Ts Tennessine h|118 Og Oganesson g"
+    .split("|").map((row) => {
+      const [z, sym, name, cat] = row.split(" ");
+      return { z, sym, name, cat };
+    });
+  const cubeElement = new Array(forms[0].length);
+  forms[0]
+    .map((cell, i) => ({ i, gx: Math.round(cell.p.x / pitch), gy: Math.round((cell.p.y - 1.2) / pitch) }))
+    .sort((a, b) => b.gy - a.gy || a.gx - b.gx)
+    .forEach((cell, n) => { cubeElement[cell.i] = ELEMENTS[n % ELEMENTS.length]; });
+  const cards = new Map();
   let pointerX = 0, pointerY = 0, smoothX = 0, smoothY = 0, scrollY = 0;
   let running = true;
   let raf = 0;
@@ -327,6 +339,7 @@ function init() {
       blocks.updateMatrixWorld();
       camera.updateMatrixWorld();
       const list = forms[0];
+      const rising = [];
       for (let i = 0; i < list.length; i++) {
         projected.copy(list[i].p).applyMatrix4(blocks.matrixWorld).project(camera);
         let influence = 0;
@@ -337,7 +350,32 @@ function init() {
           influence = Math.max(influence, near * near * trail[t].life);
         }
         lifts[i] += (influence * 0.9 - lifts[i]) * 0.2;
+        if (lifts[i] > 0.28) rising.push({ i, lift: lifts[i], x: projected.x, y: projected.y });
       }
+      rising.sort((a, b) => b.lift - a.lift);
+      const keep = new Set();
+      rising.slice(0, 8).forEach((item) => {
+        keep.add(item.i);
+        let card = cards.get(item.i);
+        if (!card) {
+          const el = cubeElement[item.i];
+          card = document.createElement("div");
+          card.className = "el-card";
+          card.style.background = CAT[el.cat];
+          card.innerHTML = `<b>${el.z}</b><strong>${el.sym}</strong><span>${el.name}</span>`;
+          stage.appendChild(card);
+          cards.set(item.i, card);
+          requestAnimationFrame(() => card.classList.add("on"));
+        }
+        card.style.left = `${(item.x * 0.5 + 0.5) * canvas.clientWidth}px`;
+        card.style.top = `${(-item.y * 0.5 + 0.5) * canvas.clientHeight - 18}px`;
+      });
+      cards.forEach((card, i) => {
+        if (keep.has(i)) return;
+        card.classList.remove("on");
+        cards.delete(i);
+        setTimeout(() => card.remove(), 180);
+      });
       placeHold();
     }
     renderer.render(scene, camera);
