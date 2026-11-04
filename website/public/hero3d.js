@@ -50,7 +50,7 @@ function init() {
   fill.position.set(-6, 2.5, -4);
   scene.add(fill);
 
-  const COLORS = { navy: 0x0b2d4b, blue: 0x1e7bff, cyan: 0x3fd5f5 };
+  const COLORS = { navy: 0x0b2d4b, blue: 0x1e7bff, cyan: 0x1e7bff };
   const pitch = 0.55;
   const slot = (x, y, z = 0) => new THREE.Vector3((x - 2.2) * pitch, y * pitch, z * pitch);
   const layout = [];
