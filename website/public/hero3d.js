@@ -173,22 +173,35 @@ function init() {
     return new THREE.Vector3((n(1.7) - 0.5) * 10, n(2.3) * 6 + 1, (n(3.1) - 0.5) * 6);
   };
   let built = reduceMotion;
+  const logo = forms[0];
+  const buildRank = new Array(logo.length);
+  logo
+    .map((cell, i) => ({
+      i,
+      gx: Math.round(cell.p.x / pitch),
+      gy: Math.round((cell.p.y - 1.2) / pitch),
+    }))
+    .sort((a, b) => a.gx - b.gx || a.gy - b.gy)
+    .forEach((cell, order) => { buildRank[cell.i] = order; });
+  const brickMs = 46;
 
   function placeBuild(progress) {
-    const list = forms[0];
     const fit = formScale[0];
+    const n = logo.length;
     for (let i = 0; i < count; i++) {
-      const cell = list[i];
+      const cell = logo[i];
       if (!cell) {
         tmp.set(0, 0, 0);
         dummy.scale.setScalar(0);
         color.setHex(0x000000);
       } else {
-        const delay = (i / list.length) * 0.35;
-        const t = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
-        const eased = 1 - (1 - t) ** 2.2;
-        tmp.copy(fromSeed(i)).lerp(cell.p, eased);
-        dummy.scale.setScalar(t > 0.88 ? fit * (1 + (1 - t) * 0.06) : fit);
+        const start = buildRank[i] / n;
+        const span = 1 / n;
+        const t = progress <= start ? 0 : Math.min(1, (progress - start) / span);
+        const eased = 1 - (1 - t) ** 2.4;
+        tmp.copy(cell.p);
+        tmp.y += (1 - eased) * 1.15;
+        dummy.scale.setScalar(t === 0 ? 0 : fit);
         color.setHex(cell.c);
       }
       blocks.setColorAt(i, color);
@@ -310,7 +323,7 @@ function init() {
     smoothY += (pointerY - smoothY) * 0.06;
     const cam = cameraAt(seconds);
     if (!built) {
-      const p = Math.min(1, phaseElapsed / 3800);
+      const p = Math.min(1, phaseElapsed / (forms[0].length * brickMs));
       placeBuild(p);
       if (p >= 1) built = true;
     } else {
