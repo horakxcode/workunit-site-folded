@@ -69,19 +69,23 @@ for (const name of holders) {
   console.log("removed", DOMAIN, "from", name);
 }
 
-const zones = await api(auth, "/zones?name=workunitlabs.com");
-if (!zones.length) throw new Error("Zone workunitlabs.com was not found on this login.");
-const zone = zones[0].id;
-const records = await api(auth, `/zones/${zone}/dns_records?name=${encodeURIComponent(DOMAIN)}`);
 const wanted = `${TARGET}.pages.dev`;
-for (const record of records) {
-  if (record.type !== "CNAME") continue;
-  if (record.content === wanted && record.proxied) continue;
-  await api(auth, `/zones/${zone}/dns_records/${record.id}`, {
-    method: "PATCH",
-    body: JSON.stringify({ type: "CNAME", name: DOMAIN, content: wanted, proxied: true, ttl: 1 }),
-  });
-  console.log("dns", record.content, "->", wanted);
+try {
+  const zones = await api(auth, "/zones?name=workunitlabs.com");
+  if (zones.length) {
+    const records = await api(auth, `/zones/${zones[0].id}/dns_records?name=${encodeURIComponent(DOMAIN)}`);
+    for (const record of records) {
+      if (record.type !== "CNAME") continue;
+      if (record.content === wanted && record.proxied) continue;
+      await api(auth, `/zones/${zones[0].id}/dns_records/${record.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ type: "CNAME", name: DOMAIN, content: wanted, proxied: true, ttl: 1 }),
+      });
+      console.log("dns", record.content, "->", wanted);
+    }
+  }
+} catch (error) {
+  console.log("skipped dns edit; Pages will set the record when the domain is attached");
 }
 
 try {
