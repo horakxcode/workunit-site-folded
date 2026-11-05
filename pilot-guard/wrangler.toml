@@ -2,11 +2,8 @@ name = "workunit-pilot-guard"
 main = "worker.js"
 compatibility_date = "2026-10-01"
 
-# Stops a plain visit to the old pilot link from creating a Stripe Checkout session.
+# The custom domain is on the new portal, but its DNS record still points at the old host.
+# This route answers portal.workunitlabs.com from the new engine until that record is updated.
 [[routes]]
-pattern = "portal.workunitlabs.com/start-pilot"
-zone_name = "workunitlabs.com"
-
-[[routes]]
-pattern = "portal.workunitlabs.com/start-pilot/"
+pattern = "portal.workunitlabs.com/*"
 zone_name = "workunitlabs.com"
