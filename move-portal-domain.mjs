@@ -1,5 +1,6 @@
 // Point portal.workunitlabs.com at the workunit-portal-engine Pages project.
 // Uses the Wrangler login already on this Mac. Does not create a Stripe session.
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -8,6 +9,22 @@ const DOMAIN = "portal.workunitlabs.com";
 const TARGET = "workunit-portal-engine";
 
 function token() {
+  const env = { ...process.env };
+  delete env.CLOUDFLARE_API_TOKEN;
+  delete env.CLOUDFLARE_API_KEY;
+  try {
+    const out = execFileSync("npx", ["--yes", "wrangler@4.157.0", "auth", "token", "--json"], {
+      encoding: "utf8",
+      env,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    const line = out.trim().split("\n").filter((item) => item.trim().startsWith("{")).pop();
+    const parsed = JSON.parse(line);
+    if (parsed.token) return parsed.token;
+  } catch (error) {
+    const detail = error.stderr ? error.stderr.toString() : error.message;
+    console.error(detail.trim());
+  }
   const candidates = [
     join(homedir(), "Library/Preferences/.wrangler/config/default.toml"),
     join(homedir(), ".config/.wrangler/config/default.toml"),
