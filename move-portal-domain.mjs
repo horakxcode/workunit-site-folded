@@ -1,9 +1,6 @@
 // Point portal.workunitlabs.com at the workunit-portal-engine Pages project.
 // Uses the Wrangler login already on this Mac. Does not create a Stripe session.
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { homedir } from "node:os";
-import { join } from "node:path";
 
 const DOMAIN = "portal.workunitlabs.com";
 const TARGET = "workunit-portal-engine";
@@ -12,32 +9,21 @@ function token() {
   const env = { ...process.env };
   delete env.CLOUDFLARE_API_TOKEN;
   delete env.CLOUDFLARE_API_KEY;
+  delete env.CLOUDFLARE_EMAIL;
+  let out = "";
   try {
-    const out = execFileSync("npx", ["--yes", "wrangler@4.157.0", "auth", "token", "--json"], {
+    out = execFileSync("npx", ["--yes", "wrangler@4.157.0", "auth", "token", "--json"], {
       encoding: "utf8",
       env,
       stdio: ["ignore", "pipe", "pipe"],
     });
-    const line = out.trim().split("\n").filter((item) => item.trim().startsWith("{")).pop();
-    const parsed = JSON.parse(line);
-    if (parsed.token) return parsed.token;
   } catch (error) {
-    const detail = error.stderr ? error.stderr.toString() : error.message;
-    console.error(detail.trim());
+    const detail = `${error.stdout || ""}\n${error.stderr || error.message}`;
+    throw new Error("Wrangler could not produce a token. Run: npx wrangler login\n" + detail.trim());
   }
-  const candidates = [
-    join(homedir(), "Library/Preferences/.wrangler/config/default.toml"),
-    join(homedir(), ".config/.wrangler/config/default.toml"),
-    join(homedir(), ".wrangler/config/default.toml"),
-  ];
-  for (const path of candidates) {
-    try {
-      const text = readFileSync(path, "utf8");
-      const match = text.match(/oauth_token\s*=\s*"([^"]+)"/);
-      if (match) return match[1];
-    } catch {}
-  }
-  throw new Error("No Wrangler login found. Run: npx wrangler login");
+  const match = String(out).match(/"token"\s*:\s*"([^"]+)"/);
+  if (!match) throw new Error("Wrangler did not return a token. Run: npx wrangler login\n" + String(out).trim().slice(0, 400));
+  return match[1];
 }
 
 async function api(auth, path, options = {}) {
