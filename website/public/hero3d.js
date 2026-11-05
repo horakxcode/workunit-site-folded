@@ -327,7 +327,8 @@ function init() {
     camera.position.y = cam.y + Math.cos(seconds * 0.18) * 0.12 + smoothY * -0.2;
     const half = Math.tan((camera.fov * Math.PI) / 180 / 2);
     const aspect = camera.userData.aspect || camera.aspect || 1;
-    camera.position.z = (fitZ / 2) / (half * aspect);
+    const narrow = aspect < 1.15 ? 1.35 : 1;
+    camera.position.z = (fitZ * narrow / 2) / (half * Math.max(aspect, 0.2));
     blocks.rotation.y = cam.ry + smoothX * 0.18;
     blocks.rotation.x = -0.08 + smoothY * 0.06;
     camera.lookAt(cam.lx + smoothX * 0.5, cam.ly + smoothY * -0.25, 0);
