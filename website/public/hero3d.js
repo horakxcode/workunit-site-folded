@@ -1,5 +1,5 @@
 // Cubes stack into the WorkUnit logo mark, on the page white.
-import * as THREE from "three";
+import * as THREE from "/vendor/three/three.module.min.js";
 import { RoomEnvironment } from "./vendor/three/RoomEnvironment.js";
 
 const canvas = document.getElementById("hero-canvas");
